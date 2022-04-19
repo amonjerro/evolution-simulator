@@ -7,17 +7,17 @@ This is a Python program for the modelling of simple evolving systems. It was in
 Still to implement:
 
 - The Gene System
-    [] Define a number of behaviour genes
-    [] Create the network of neurons
-    [] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
+    - [ ] Define a number of behaviour genes
+    - [ ] Create the network of neurons
+    - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
 - Animate the generation
-    [] Produce an image for every step
-    [] Join the images into a single animated file
-    [] Export/Save animated
+    - [ ] Produce an image for every step
+    - [ ] Join the images into a single animated file
+    - [ ] Export/Save animated
 - Generational Reports
-    [] Graphs showing: 
-        [] Genetic diversity
-        [] Mortality Rate
+    - [ ] Graphs showing: 
+        - [ ] Genetic diversity
+        - [ ] Mortality Rate
  
 
 ## How to run
