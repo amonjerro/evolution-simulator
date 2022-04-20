@@ -1,0 +1,2 @@
+class UndefinedNeuronError(Exception):
+    pass

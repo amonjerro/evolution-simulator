@@ -1,20 +1,21 @@
 import random
-from src.being import Being
-from src.board import Coordinate
+from imager import ImageManager
+from src.being import Being, Population
+from src.board import Coordinate, Board
 
 
 class Simulation:
-    def __init__(self, board, imager, config):
-        self.board = board
-        self.population_size = config['population-size']
+    def __init__(self, config):
+        self.board = Board(config)
+        self.imager = ImageManager(config)
+        self.population = Population(config)
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
         self.max_generations = config['max-generations']
-        self.imager = imager
 
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()
-        for i in range(self.population_size):
+        for i in range(self.population.get_population_size()):
             populated = False
             while not populated:
                 starting_coordinate = Coordinate(
@@ -26,6 +27,7 @@ class Simulation:
                 else:
                     b = Being(starting_coordinate,self.gene_length)
                 populated = self.board.populate_space(b)
+            self.population.add_being(b)
 
     def run_simulation_step(self):
         #For every being, perform their actions
@@ -37,7 +39,7 @@ class Simulation:
         #Run all steps
         for step in range(self.max_steps):
             self.run_simulation_step()
-            beings = self.board.get_beings()
+            beings = self.population.get_beings()
             self.imager.render_simulation_step(step, beings)
 
         #Apply selection criteria
@@ -46,6 +48,7 @@ class Simulation:
 
         #Wipe the board
         self.board.wipe()
+        self.population.wipe()
 
         #Populate the board again
         self.populate_board()

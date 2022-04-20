@@ -12,7 +12,6 @@ class Board:
             self.board.append([None for j in range(config['board-size'])])
         self.y_dim = len(self.board)
         self.x_dim = len(self.board[0])
-        self.being_list = []
     def get_dimensions(self):
         return (self.x_dim, self.y_dim)
     def is_occupied(self, coordinate):
@@ -23,13 +22,9 @@ class Board:
     def populate_space(self, being):
         if not self.is_occupied(being.get_position()):
             self.board[being.y][being.x] = being
-            self.being_list.append(being)
             return True
         return False
     def wipe(self):
-        del self.being_list[:]
         del self.board[:]
         for i in range(self.y_dim):
             self.board.append([None for j in range(self.x_dim)])
-    def get_beings(self):
-        return self.being_list

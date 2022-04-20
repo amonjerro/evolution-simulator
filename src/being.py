@@ -1,5 +1,5 @@
-import secrets
 from src.board import Coordinate
+from src.neuron import Gene
 
 def pad_zeroes(value, min_length):
     zeroes = '0'*min_length
@@ -15,9 +15,9 @@ class Genome:
     def create_random(self, gene_length):
         self.genes = []
         for i in range(gene_length):
-            self.genes.append(secrets.token_hex(3))
+            self.genes.append(Gene())
     def genes_to_color(self):
-        total = sum([int(gene, 16) for gene in self.genes])
+        total = sum([int(gene.hex_string, 16) for gene in self.genes])
         hexval = hex(int(total/len(self.genes)))[2:]
         return f'#{pad_zeroes(hexval, 6)}'
 
@@ -32,3 +32,15 @@ class Being:
         self.y = new_coordinate.y
     def get_position(self):
         return Coordinate(self.x, self.y)
+
+
+class Population:
+    def __init__(self, config):
+        self.population_size = config['population-size']
+        self.being_list = []
+    def get_population_size(self):
+        return self.population_size
+    def add_being(self, being):
+        self.being_list.append(being)
+    def wipe(self):
+        del self.being_list[:]
