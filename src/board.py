@@ -4,6 +4,8 @@ class Coordinate:
         self.y = y
     def __str__(self):
         return str((self.x,self.y))
+    def unpack(self):
+        return (self.x, self.y)
 
 class Board:
     def __init__(self, config):

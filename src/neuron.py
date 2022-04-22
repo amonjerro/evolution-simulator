@@ -1,5 +1,7 @@
 import secrets
+
 from src.errors import UndefinedNeuronError
+from src.behavior_constants import ACTION_FUNCTIONS
 
 class Neuron:
     def __init__(self):

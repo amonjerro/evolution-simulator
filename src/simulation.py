@@ -1,5 +1,5 @@
 import random
-from imager import ImageManager
+from src.imager import ImageManager
 from src.being import Being, Population
 from src.board import Coordinate, Board
 

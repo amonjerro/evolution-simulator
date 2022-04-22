@@ -17,7 +17,7 @@ class Genome:
         for i in range(gene_length):
             self.genes.append(Gene())
     def genes_to_color(self):
-        total = sum([int(gene.hex_string, 16) for gene in self.genes])
+        total = sum([int(gene.gene_string, 16) for gene in self.genes])
         hexval = hex(int(total/len(self.genes)))[2:]
         return f'#{pad_zeroes(hexval, 6)}'
 
@@ -40,6 +40,8 @@ class Population:
         self.being_list = []
     def get_population_size(self):
         return self.population_size
+    def get_beings(self):
+        return self.being_list
     def add_being(self, being):
         self.being_list.append(being)
     def wipe(self):
