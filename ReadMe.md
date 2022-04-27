@@ -9,6 +9,7 @@ Still to implement:
 - The Gene System
     - [X] Define a number of behaviour genes
     - [X] Create the network of neurons
+    - [ ] Add process for sensing / acting of every being
     - [ ] Test one generation of the simulation
     - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
 - Animate the generation
