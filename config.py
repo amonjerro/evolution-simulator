@@ -5,5 +5,6 @@ CONFIG = {
     'population-size':200,
     'max-generations':200,
     'max-steps':1,
-    'gene-length':4
+    'gene-length':4,
+    'internal-neurons':2
 }

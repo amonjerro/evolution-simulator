@@ -2,16 +2,20 @@ import random
 from src.imager import ImageManager
 from src.being import Being, Population
 from src.board import Coordinate, Board
-
+from src.neuron import NeuronFactory
 
 class Simulation:
     def __init__(self, config):
         self.board = Board(config)
         self.imager = ImageManager(config)
         self.population = Population(config)
+        self.neuronFactory = NeuronFactory(config)
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
         self.max_generations = config['max-generations']
+
+    def get_population(self):
+        return self.population
 
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()
@@ -26,6 +30,7 @@ class Simulation:
                     b = Being(starting_coordinate,self.gene_length, genes=beings[i].genome.genes[:])
                 else:
                     b = Being(starting_coordinate,self.gene_length)
+                b.set_neuron_blueprints(self.neuronFactory.make_neurons_for_being())
                 populated = self.board.populate_space(b)
             self.population.add_being(b)
 

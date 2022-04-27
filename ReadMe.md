@@ -7,8 +7,9 @@ This is a Python program for the modelling of simple evolving systems. It was in
 Still to implement:
 
 - The Gene System
-    - [ ] Define a number of behaviour genes
-    - [ ] Create the network of neurons
+    - [X] Define a number of behaviour genes
+    - [X] Create the network of neurons
+    - [ ] Test one generation of the simulation
     - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
 - Animate the generation
     - [ ] Produce an image for every step
@@ -65,5 +66,4 @@ To edit some of the parameters of the simulation, edit the config.py file of the
 - max-generations: The number of generations a run of this simulation will generate
 - max-steps: The number of steps the beings will be allowed to take until a generation is considered complete and selection criteria are applied.
 - gene-length: The complexity of the genes every being will have.
-
-
+- internal-neurons: Max number of separate internal neurons in the genetic pool
