@@ -9,11 +9,11 @@ Still to implement:
 - The Gene System
     - [X] Define a number of behaviour genes
     - [X] Create the network of neurons
-    - [ ] Add process for sensing / acting of every being
-    - [ ] Test one generation of the simulation
+    - [X] Add process for sensing / acting of every being
+    - [X] Test one generation of the simulation
     - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
 - Animate the generation
-    - [ ] Produce an image for every step
+    - [X] Produce an image for every step
     - [ ] Join the images into a single animated file
     - [ ] Export/Save animated
 - Generational Reports
@@ -68,3 +68,4 @@ To edit some of the parameters of the simulation, edit the config.py file of the
 - max-steps: The number of steps the beings will be allowed to take until a generation is considered complete and selection criteria are applied.
 - gene-length: The complexity of the genes every being will have.
 - internal-neurons: Max number of separate internal neurons in the genetic pool
+- action-threshold: The value needed to excite an action neuron. 

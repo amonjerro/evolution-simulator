@@ -35,25 +35,41 @@ class Simulation:
             self.population.add_being(b)
 
     def run_simulation_step(self):
-        #For every being, perform their actions
+        #For every being, sense & feedforward
+        self.population.execute_senses()
+        self.population.process_internal_signals()
 
-        #Render the new board state
-        pass
+        #For every being, stage the actions they want to perform
+        beings = self.population.get_beings()
+        for being in beings:
+            tentative_new_coordinate = being.act()
+            if self.board.is_valid_move(tentative_new_coordinate):
+                #Update the being's coordinates
+                old_coordinate = being.get_position()
+                being.update_position(tentative_new_coordinate)
+                #Populate the space
+                self.board.populate_space(being)
+                #Depopulate the old space
+                self.board.depopulate_space(old_coordinate)
 
     def run_simulation_generation(self):
+        beings = self.population.get_beings()
+        self.imager.render_simulation_step(0, beings)
+
         #Run all steps
         for step in range(self.max_steps):
             self.run_simulation_step()
             beings = self.population.get_beings()
-            self.imager.render_simulation_step(step, beings)
+            self.imager.render_simulation_step(step+1, beings)
+            
 
         #Apply selection criteria
 
         #Create the new individuals
 
         #Wipe the board
-        self.board.wipe()
-        self.population.wipe()
+        # self.board.wipe()
+        # self.population.wipe()
 
         #Populate the board again
-        self.populate_board()
+        # self.populate_board()

@@ -6,6 +6,10 @@ from src.board import Coordinate
 
 WORLD_SIZE = CONFIG['board-size']
 
+class NeuronEnum(Enum):
+    SENSOR=1
+    INTERNAL=2
+    ACTION=3
 
 class ActionEnum(Enum):
     MOVE_UP=1
@@ -51,46 +55,42 @@ SENSOR_FUNCTIONS={
 
 ## ACTIONS ##
 
-def move_up(coordinate):
-    x,y = coordinate.unpack()
-    return Coordinate(x,y-1)
+def move_up():
+    return Coordinate(0,-1)
 
-def move_down(coordinate):
-    x,y = coordinate.unpack()
-    return Coordinate(x,y+1)
+def move_down():
+    return Coordinate(0,1)
 
-def move_left(coordinate):
-    x,y = coordinate.unpack()
-    return Coordinate(x-1,y)
+def move_left():
+    return Coordinate(-1,0)
 
-def move_right(coordinate):
-    x,y = coordinate.unpack()
-    return Coordinate(x+1,y)
+def move_right():
+    return Coordinate(1,0)
 
-def move_random(coordinate):
-    x,y = coordinate.unpack()
-    new_y = y
+def move_random():
+    new_y = 0
     if random.randint(0,1) == 1:
         #Move Y
         if random.randint(0,1) == 1:
             # Move Up
-            new_y = y - 1
+            new_y = -1
         else:
             # Move Down
-            new_y = y + 1
+            new_y = 1
     
-    new_x = x
-    
+    new_x = 0
     if random.randint(0,1) == 1:
         # Move X
         if random.randint(0,1) == 1:
             # Move Left
-            new_x = x - 1
+            new_x = -1
         else:
             # Move Right
-            new_x = x + 1
+            new_x = 1
     return Coordinate(new_x, new_y)
 
+def no_op():
+    return Coordinate(0,0)
 
 ACTION_FUNCTIONS={
     ActionEnum.MOVE_UP:move_up,
