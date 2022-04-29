@@ -14,8 +14,7 @@ Still to implement:
     - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
 - Animate the generation
     - [X] Produce an image for every step
-    - [ ] Join the images into a single animated file
-    - [ ] Export/Save animated
+    - [X] Join the images into a single animated file
 - Generational Reports
     - [ ] Graphs showing: 
         - [ ] Genetic diversity
@@ -61,6 +60,7 @@ Then check the output folder to see the results.
 To edit some of the parameters of the simulation, edit the config.py file of the root directory. This is an explanation of the params:
 
 - image-output-path: The location of the output path for the images. By default, it will be a file in the downloaded repository which the executing code will itself generate. If you change this param, remember the code will try to create the output directory as part of its runtime.
+- image-by-step: Change flag to `True` if you want to produce a separate image for every step of every generation. Good for debugging or visualizing data in a small amount of generations, but can quickly grow out of hand with many generations. 
 - being-size: The size in pixels of the beings that populate the simulation. Larger sizes influence the resolution of the final image.
 - board-size: The size of the grid, in being-size units. By default, the board is 180 beings wide and 180 beings tall. No current plan to implement rectangular boards exists.
 - population-size: The amount of beings to create when populating the board

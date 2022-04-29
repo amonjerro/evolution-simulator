@@ -39,11 +39,12 @@ class Action(Neuron):
         
     def set_threshhold(self, value):
         self.threshold = value
-    def _meets_threshold(self):
-        return math.tanh(self.get_activation()) > self.threshold
-    def act(self):
+    def _meets_threshold(self, modifier):
+        activation_value = math.tanh(self.get_activation()*modifier) 
+        return  activation_value > self.threshold
+    def act(self, modifier):
         if self.function:
-            if self._meets_threshold():
+            if self._meets_threshold(modifier):
                 return self.function()
             else:
                 return no_op()
@@ -110,17 +111,22 @@ class Gene:
     def is_action(self):
         return int(self.gene_string[2],16)%2==0
 
-    def feed_forward(self, params, blueprint):
+    def feed_forward(self, params, blueprint, excitability):
         origin, target, sensitivity = self.decode(blueprint)
 
         if origin.type == NeuronEnum.SENSOR:
             origin.sense(params)
 
-        target.set_activation(target.get_activation()+(origin.get_activation()*sensitivity))
+        activation_score = origin.get_activation()*sensitivity*excitability
+
+        target.set_activation(target.get_activation()+activation_score)
+        origin.set_activation(0)
     
-    def enact(self, blueprint):
+    def enact(self, blueprint, excitability):
         origin, action, _ = self.decode(blueprint)
-        return action.act()
+        act_results = action.act(excitability)
+        action.set_activation(0)
+        return act_results
 
     def decode(self, blueprint):
         #The hexstring that contains all the information to describe the gene
@@ -131,7 +137,7 @@ class Gene:
         origin_rounds = int(self.gene_string[1],16)
         target_neuron_type = int(self.gene_string[2],16)
         target_rounds = int(self.gene_string[3], 16)
-        connection_sensitivity = int(self.gene_string[-2:],16) / 256
+        connection_sensitivity = int(self.gene_string[-2:],16) / 128
 
         origin_key = ''
         if origin_neuron_type % 2 == 0:

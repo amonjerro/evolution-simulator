@@ -1,3 +1,5 @@
+import random
+
 from src.board import Coordinate
 from src.neuron import Gene
 
@@ -50,35 +52,45 @@ class Being:
     def __init__(self, starting_coordinates, gene_length, genes=None):
         self.x = starting_coordinates.x
         self.y = starting_coordinates.y
+        self.excitability = random.uniform(0.5,1.5)
         self.genome = Genome(gene_length=gene_length, genes=genes)
+
     def update_position(self, new_coordinate):
         self.x = new_coordinate.x
         self.y = new_coordinate.y
+
     def get_position(self):
         return Coordinate(self.x, self.y)
+
     def get_genome(self):
         return self.genome
+
     def set_neuron_blueprints(self, blueprints):
         self.genome.set_blueprints(blueprints)
+
     def print_self(self):
         print('====Being Information=====')
         print(f'Location:({self.x},{self.y})')
         self.genome.print_genome()
+
     def act(self):
         actions = self.genome.actions
         position_update = self.get_position()
         for action in actions:
-            c = action.enact(self.genome.blueprints)
+            c = action.enact(self.genome.blueprints, self.excitability)
             position_update.add(c)
         return position_update
+
     def activate_senses(self):
         senses = self.genome.sensors
         for sense in senses:
-            sense.feed_forward(self.get_position(), self.genome.blueprints)
+            sense.feed_forward(self.get_position(), self.genome.blueprints, self.excitability)
+
     def process_internals(self):
         internals = self.genome.internals
         for internal in internals:
-            internal.feed_forward(None, self.genome.blueprints)
+            internal.feed_forward(None, self.genome.blueprints, self.excitability)
+
 
 class Population:
     def __init__(self, config):

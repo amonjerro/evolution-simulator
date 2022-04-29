@@ -4,6 +4,7 @@ from src.being import Being, Population
 from src.board import Coordinate, Board
 from src.neuron import NeuronFactory
 
+
 class Simulation:
     def __init__(self, config):
         self.board = Board(config)
@@ -13,9 +14,15 @@ class Simulation:
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
         self.max_generations = config['max-generations']
+        self.current_generation = 0
 
     def get_population(self):
         return self.population
+
+    def check_diversity(self):
+        # Calculates a diversity metric for the population
+        # Stores it every generation ran
+        pass
 
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()
@@ -34,34 +41,47 @@ class Simulation:
                 populated = self.board.populate_space(b)
             self.population.add_being(b)
 
-    def run_simulation_step(self):
-        #For every being, sense & feedforward
-        self.population.execute_senses()
-        self.population.process_internal_signals()
-
-        #For every being, stage the actions they want to perform
-        beings = self.population.get_beings()
-        for being in beings:
-            tentative_new_coordinate = being.act()
-            if self.board.is_valid_move(tentative_new_coordinate):
-                #Update the being's coordinates
-                old_coordinate = being.get_position()
-                being.update_position(tentative_new_coordinate)
-                #Populate the space
-                self.board.populate_space(being)
-                #Depopulate the old space
-                self.board.depopulate_space(old_coordinate)
 
     def run_simulation_generation(self):
-        beings = self.population.get_beings()
-        self.imager.render_simulation_step(0, beings)
+
+        def _run_simulation_step(self):
+            #For every being, sense & feedforward
+            self.population.execute_senses()
+            self.population.process_internal_signals()
+
+            #For every being, stage the actions they want to perform
+            beings = self.population.get_beings()
+            for being in beings:
+                tentative_new_coordinate = being.act()
+                if self.board.is_valid_move(tentative_new_coordinate):
+                    #Update the being's coordinates
+                    old_coordinate = being.get_position()
+                    being.update_position(tentative_new_coordinate)
+                    #Populate the space
+                    self.board.populate_space(being)
+                    #Depopulate the old space
+                    self.board.depopulate_space(old_coordinate)
+
+        ## Function start
+        self.imager.render_simulation_step(
+            self.current_generation, 
+            0, 
+            self.population.get_beings()
+        )
 
         #Run all steps
         for step in range(self.max_steps):
-            self.run_simulation_step()
-            beings = self.population.get_beings()
-            self.imager.render_simulation_step(step+1, beings)
-            
+            _run_simulation_step(self)
+            self.imager.render_simulation_step(
+                self.current_generation,
+                step+1, 
+                self.population.get_beings()
+            )
+        
+        self.imager.gen_to_gif(self.current_generation)
+
+        #Gen Report
+        self.check_diversity()
 
         #Apply selection criteria
 
@@ -73,3 +93,4 @@ class Simulation:
 
         #Populate the board again
         # self.populate_board()
+        self.current_generation += 1
