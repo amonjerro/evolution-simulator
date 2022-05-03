@@ -101,21 +101,29 @@ class Gene:
             self.gene_string = hex_string
         else:
             self.gene_string = secrets.token_hex(3)
+
     def _get_neuron_from_blueprint(self, blueprint, key, rounds):
         neuron_type_length = len(blueprint[key])
         return blueprint[key][rounds%neuron_type_length]
+
     def is_sensor(self):
         return int(self.gene_string[0],16)%2==0
+    
     def is_internal(self):
         return int(self.gene_string[0],16)%2==1
+        
     def is_action(self):
         return int(self.gene_string[2],16)%2==0
 
     def feed_forward(self, params, blueprint, excitability):
         origin, target, sensitivity = self.decode(blueprint)
 
-        if origin.type == NeuronEnum.SENSOR:
-            origin.sense(params)
+        try:
+            if origin.type == NeuronEnum.SENSOR:
+                origin.sense(params)
+        except AttributeError:
+            print(origin, target, self.gene_string, params)
+            exit(400)
 
         activation_score = origin.get_activation()*sensitivity*excitability
 
@@ -124,7 +132,11 @@ class Gene:
     
     def enact(self, blueprint, excitability):
         origin, action, _ = self.decode(blueprint)
-        act_results = action.act(excitability)
+        try:
+            act_results = action.act(excitability)
+        except AttributeError:
+            print(self.gene_string)
+            exit(400)
         action.set_activation(0)
         return act_results
 

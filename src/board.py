@@ -10,13 +10,18 @@ class Coordinate:
         self.x += other.x
         self.y += other.y
 
-class Board:
-    def __init__(self, config):
+class BoardSingleton(object):
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(BoardSingleton, cls).__new__(cls)
+        return cls.instance
+    def config(self, config):
         self.board = []
         for i in range(config['board-size']):
             self.board.append([None for j in range(config['board-size'])])
         self.y_dim = len(self.board)
         self.x_dim = len(self.board[0])
+    
     def get_dimensions(self):
         return (self.x_dim, self.y_dim)
     

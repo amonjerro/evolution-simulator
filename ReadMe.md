@@ -11,7 +11,11 @@ Still to implement:
     - [X] Create the network of neurons
     - [X] Add process for sensing / acting of every being
     - [X] Test one generation of the simulation
-    - [ ] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
+    - [X] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
+        - [X] Geographical Selection
+        - [X] Reproduction System
+        - [X] Mutation System
+    - [ ] Multi generational runs (Currently, there is an issue in reproduction/being generation that mislabels internal neurons)
 - Animate the generation
     - [X] Produce an image for every step
     - [X] Join the images into a single animated file

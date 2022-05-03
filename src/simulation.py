@@ -1,15 +1,25 @@
 import random
-from src.imager import ImageManager
-from src.being import Being, Population
-from src.board import Coordinate, Board
+from src.imager import ImageManagerSingleton
+from src.being import Being, PopulationSingleton
+from src.board import Coordinate, BoardSingleton
 from src.neuron import NeuronFactory
 
+from src.selection_criteria import box_filter, circle_filter
+from src.utils import Rect, Circle
+from src.reproduction import sexual_reproduction
 
 class Simulation:
     def __init__(self, config):
-        self.board = Board(config)
-        self.imager = ImageManager(config)
-        self.population = Population(config)
+        #Config singletons and other basic classes
+        self.board = BoardSingleton()
+        self.board.config(config)
+        
+        self.imager = ImageManagerSingleton()
+        self.imager.config(config)
+
+        self.population = PopulationSingleton()
+        self.population.config(config)
+
         self.neuronFactory = NeuronFactory(config)
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
@@ -18,6 +28,15 @@ class Simulation:
 
     def get_population(self):
         return self.population
+    
+    def set_selection_criteria(self, shape):
+        self.criteria_shape = shape
+        if isinstance(shape, Rect):
+            self.criteria_function = box_filter
+            self.imager.draw_selection = self.imager.draw_box_filter 
+        elif isinstance(shape, Circle):
+            self.criteria_function = circle_filter
+            self.imager.draw_selection = self.imager.draw_circle_filter
 
     def check_diversity(self):
         # Calculates a diversity metric for the population
@@ -34,9 +53,11 @@ class Simulation:
                         random.randint(1, dimensions[1]-1)
                         )
                 if beings is not None:
-                    b = Being(starting_coordinate,self.gene_length, genes=beings[i].genome.genes[:])
+                    being_a, being_b = random.sample(beings, 2)
+                    new_being_genes = sexual_reproduction(being_a, being_b)
+                    b = Being(starting_coordinate, self.gene_length, genes=new_being_genes)
                 else:
-                    b = Being(starting_coordinate,self.gene_length)
+                    b = Being(starting_coordinate, self.gene_length)
                 b.set_neuron_blueprints(self.neuronFactory.make_neurons_for_being())
                 populated = self.board.populate_space(b)
             self.population.add_being(b)
@@ -77,20 +98,18 @@ class Simulation:
                 step+1, 
                 self.population.get_beings()
             )
-        
-        self.imager.gen_to_gif(self.current_generation)
+        self.imager.draw_selection(self.criteria_shape)
+        self.imager.make_gif_from_gen(self.current_generation)
 
         #Gen Report
         self.check_diversity()
 
         #Apply selection criteria
+        survivors = self.criteria_function(self.criteria_shape)
+        self.population.wipe()
+        #Wipe the board
+        self.board.wipe()
 
         #Create the new individuals
-
-        #Wipe the board
-        # self.board.wipe()
-        # self.population.wipe()
-
-        #Populate the board again
-        # self.populate_board()
+        self.populate_board(survivors)
         self.current_generation += 1

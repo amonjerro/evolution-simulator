@@ -92,8 +92,12 @@ class Being:
             internal.feed_forward(None, self.genome.blueprints, self.excitability)
 
 
-class Population:
-    def __init__(self, config):
+class PopulationSingleton(object):
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(PopulationSingleton, cls).__new__(cls)
+        return cls.instance
+    def config(self, config):
         self.population_size = config['population-size']
         self.being_list = []
     def get_population_size(self):
