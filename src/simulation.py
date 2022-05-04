@@ -3,6 +3,7 @@ from src.imager import ImageManagerSingleton
 from src.being import Being, PopulationSingleton
 from src.board import Coordinate, BoardSingleton
 from src.neuron import NeuronFactory
+from src.reports import ReportSingleton
 
 from src.selection_criteria import box_filter, circle_filter
 from src.utils import Rect, Circle
@@ -19,6 +20,9 @@ class Simulation:
 
         self.population = PopulationSingleton()
         self.population.config(config)
+
+        self.reports = ReportSingleton()
+        self.reports.config(config)
 
         self.neuronFactory = NeuronFactory(config)
         self.gene_length = config['gene-length']
@@ -41,7 +45,7 @@ class Simulation:
     def check_diversity(self):
         # Calculates a diversity metric for the population
         # Stores it every generation ran
-        pass
+        return 0
 
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()
@@ -101,14 +105,16 @@ class Simulation:
         self.imager.draw_selection(self.criteria_shape)
         self.imager.make_gif_from_gen(self.current_generation)
 
-        #Gen Report
-        self.check_diversity()
-
         #Apply selection criteria
         survivors = self.criteria_function(self.criteria_shape)
         self.population.wipe()
         #Wipe the board
         self.board.wipe()
+
+        #Gen Report
+        diversity = self.check_diversity()
+        deaths = self.population.get_population_size() - len(survivors)
+        self.reports.add_generation_data(deaths, diversity)
 
         #Create the new individuals
         self.populate_board(survivors)

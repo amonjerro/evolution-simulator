@@ -10,5 +10,7 @@ from src.neuron import NeuronFactory
 
 from src.imager import ImageManagerSingleton
 
+from src.reports import ReportSingleton
+
 from src.utils import Rect
 from src.utils import Circle

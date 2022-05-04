@@ -10,6 +10,12 @@ Still to implement:
     - [X] Define a number of behaviour genes
     - [X] Create the network of neurons
     - [X] Add process for sensing / acting of every being
+        - [ ] Expand the sensor system:
+            - Sense population density gradient
+            - Sense general motion gradient
+        - [ ] Expand the action system:
+            - Move towards / away from pop gradient
+            - Move towards / away from motion gradient
     - [X] Test one generation of the simulation
     - [X] Implement the genetic algorithm (selection / fitness evaluation, reproduction, mutation)
         - [X] Geographical Selection
@@ -25,7 +31,7 @@ Still to implement:
 - Generational Reports
     - [ ] Graphs showing: 
         - [ ] Genetic diversity
-        - [ ] Mortality Rate
+        - [X] Mortality Rate
  
 
 ## How to run

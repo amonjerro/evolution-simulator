@@ -1,4 +1,3 @@
-from tracemalloc import start
 from src.being import PopulationSingleton
 
 def box_filter(rect):

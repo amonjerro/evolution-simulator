@@ -17,6 +17,10 @@ class ImageManagerSingleton(object):
         self.draw_selection = None
         if self.output_path not in [fo.name for fo in os.scandir()]:
             os.mkdir(f'./{self.output_path}')
+        if 'gen_gifs' not in [i.name for i in os.scandir(f'./{self.output_path}')]:
+            os.mkdir(f'./{self.output_path}/gen_gifs')
+        if self.image_by_step and 'sim_steps' not in [i.name for i in os.scandir(f'./{self.output_path}')]:
+            os.mkdir(f'./{self.output_path}/sim_steps') 
 
     def render_simulation_step(self, gen, step, beings):
         im = Image.new("RGB", self.image_size, (255,255,255, 255))
@@ -28,7 +32,7 @@ class ImageManagerSingleton(object):
 
         #Conditional image rendering
         if self.image_by_step:
-            with open(f'./{self.output_path}/simulation_step_{gen}-{step}.jpg', 'wb') as f:
+            with open(f'./{self.output_path}/sim_steps/simulation_step_{gen}-{step}.jpg', 'wb') as f:
                 im.save(f, 'jpeg')
 
     def draw_being(self, draw_ctx, being):
@@ -68,7 +72,7 @@ class ImageManagerSingleton(object):
 
     def make_gif_from_gen(self, gen):
         self.frames[0].save(
-            f'./{self.output_path}/generation_{gen}.gif',
+            f'./{self.output_path}/gen_gifs/generation_{gen}.gif',
             save_all=True,
             append_images=self.frames[1:],
             duration=(self.MAX_GIF_DURATION/len(self.frames)),

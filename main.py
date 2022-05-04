@@ -1,6 +1,7 @@
 from config import CONFIG
 from src import Simulation
 from src import Rect
+from src.reports import ReportSingleton
 
 if __name__ == '__main__':
     sim = Simulation(CONFIG)
@@ -9,4 +10,4 @@ if __name__ == '__main__':
     for i in range(CONFIG['max-generations']):
         print(i)
         sim.run_simulation_generation()
-    
+    ReportSingleton().plot_death_rate()
