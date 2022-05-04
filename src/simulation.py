@@ -52,7 +52,7 @@ class Simulation:
                         random.randint(1,dimensions[0]-1), 
                         random.randint(1, dimensions[1]-1)
                         )
-                if beings is not None:
+                if beings is not None and len(beings)>0:
                     being_a, being_b = random.sample(beings, 2)
                     new_being_genes = sexual_reproduction(being_a, being_b)
                     b = Being(starting_coordinate, self.gene_length, genes=new_being_genes)

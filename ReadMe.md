@@ -15,7 +15,10 @@ Still to implement:
         - [X] Geographical Selection
         - [X] Reproduction System
         - [X] Mutation System
-    - [ ] Multi generational runs (Currently, there is an issue in reproduction/being generation that mislabels internal neurons)
+    - [X] Multi generational runs
+        - Fixed issue with internal neurons being mislabeled by forcing rebuild of the quick access arrays at the first sense step.
+        - This doesn't fix the cause, but at least resolves the symptoms.
+    - [ ] Additional methods of reproduction (asexual, intra-gene splicing)
 - Animate the generation
     - [X] Produce an image for every step
     - [X] Join the images into a single animated file
@@ -73,3 +76,5 @@ To edit some of the parameters of the simulation, edit the config.py file of the
 - gene-length: The complexity of the genes every being will have.
 - internal-neurons: Max number of separate internal neurons in the genetic pool
 - action-threshold: The value needed to excite an action neuron. 
+- mutation-enabled: Boolean flag to allow for beings to mutate on reproduction
+- mutation-chance: Mutation chance per gene.

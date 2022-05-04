@@ -110,6 +110,7 @@ class PopulationSingleton(object):
         return self.being_list
     def execute_senses(self):
         for being in self.being_list:
+            being.genome._set_quick_access_arrays()
             being.activate_senses()
     def process_internal_signals(self):
         for being in self.being_list:

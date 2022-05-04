@@ -107,10 +107,10 @@ class Gene:
         return blueprint[key][rounds%neuron_type_length]
 
     def is_sensor(self):
-        return int(self.gene_string[0],16)%2==0
+        return int(self.gene_string[0],16) % 2 == 0
     
     def is_internal(self):
-        return int(self.gene_string[0],16)%2==1
+        return int(self.gene_string[0],16) % 2 == 1
         
     def is_action(self):
         return int(self.gene_string[2],16)%2==0
@@ -118,12 +118,8 @@ class Gene:
     def feed_forward(self, params, blueprint, excitability):
         origin, target, sensitivity = self.decode(blueprint)
 
-        try:
-            if origin.type == NeuronEnum.SENSOR:
-                origin.sense(params)
-        except AttributeError:
-            print(origin, target, self.gene_string, params)
-            exit(400)
+        if origin.type == NeuronEnum.SENSOR:
+            origin.sense(params)
 
         activation_score = origin.get_activation()*sensitivity*excitability
 
@@ -135,7 +131,6 @@ class Gene:
         try:
             act_results = action.act(excitability)
         except AttributeError:
-            print(self.gene_string)
             exit(400)
         action.set_activation(0)
         return act_results
