@@ -24,6 +24,8 @@ After the simulation is done, a GIF file for every generation will have been cre
 
 ## Example Generation
 
+This is an example of the 29th generation of selecting using the red rectangle. 
+
 ![generation_29](https://user-images.githubusercontent.com/9394777/166844888-70ba07c6-661d-4ee8-a205-a52e7e14e45d.gif)
 
 ## TO DO
