@@ -64,6 +64,8 @@ Still to implement:
 
 Known issues
 
+- [ ] Beings can be created with no sensor or action neurons.
+
 
 ## How to run
 
