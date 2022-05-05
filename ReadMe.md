@@ -65,7 +65,7 @@ Still to implement:
 Known issues
 
 - [ ] Beings can be created with no sensor or action neurons.
-
+- [ ] Beings are moving into occupied spaces during a generation
 
 ## How to run
 
