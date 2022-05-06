@@ -12,14 +12,13 @@ class Genome:
     def __init__(self, genes, gene_length=0):
         self.blueprints = None
         if genes:
-            self.genes = genes
+            self.genes = [Gene(string) for string in genes]
         else:
             self.create_random(gene_length)
 
         self.sensors = []
         self.actions = []
         self.internals = []
-        self._set_quick_access_arrays()
     
     def print_genome(self):
         print('===== Printing Genome =====')
@@ -42,10 +41,15 @@ class Genome:
         hexval = hex(int(total/len(self.genes)))[2:]
         return f'#{pad_zeroes(hexval, 6)}'
     
-    def _set_quick_access_arrays(self):
-        self.sensors = list(filter(lambda x: x.is_sensor(), self.genes))
-        self.internals = list(filter(lambda x: x.is_internal(), self.genes))
-        self.actions = list(filter(lambda x: x.is_action(), self.genes))
+    def set_quick_access_arrays(self):
+        for gene in self.genes:
+            if gene.is_sensor():
+                self.sensors.append(gene)
+            elif gene.is_internal():
+                self.internals.append(gene)
+            
+            if gene.is_action():
+                self.actions.append(gene)
 
 
 class Being:
@@ -102,6 +106,9 @@ class PopulationSingleton(object):
         self.being_list = []
     def get_population_size(self):
         return self.population_size
+    def being_is_valid(self, being):
+        genome = being.get_genome()
+        return len(genome.sensors) > 0 and len(genome.actions) > 0
     def inspect_being(self, index):
         being = self.being_list[index]
         being.print_self()
@@ -110,7 +117,6 @@ class PopulationSingleton(object):
         return self.being_list
     def execute_senses(self):
         for being in self.being_list:
-            being.genome._set_quick_access_arrays()
             being.activate_senses()
     def process_internal_signals(self):
         for being in self.being_list:

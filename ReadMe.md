@@ -48,8 +48,6 @@ Still to implement:
         - [X] Reproduction System
         - [X] Mutation System
     - [X] Multi generational runs
-        - Fixed issue with internal neurons being mislabeled by forcing rebuild of the quick access arrays at the first sense step.
-        - This doesn't fix the cause, but at least resolves the symptoms.
     - [ ] Additional methods of reproduction (asexual, intra-gene splicing)
     - [ ] Proper inhibitor genes
 - Genetic Algorithm Implementations
@@ -61,10 +59,6 @@ Still to implement:
     - [ ] Graphs showing: 
         - [ ] Genetic diversity
         - [X] Mortality Rate
-
-Known issues
-
-- [ ] Beings can be created with no sensor or action neurons.
 
 
 ## How to run

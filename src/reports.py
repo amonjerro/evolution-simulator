@@ -22,3 +22,5 @@ class ReportSingleton:
             self.generation_deaths 
         )
         plt.savefig(f'./{self.output_path}/reports/death_rate_by_gen.png')
+    def get_death_rate(self, index):
+        return self.generation_deaths[index]

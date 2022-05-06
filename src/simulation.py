@@ -58,12 +58,17 @@ class Simulation:
                         )
                 if beings is not None and len(beings)>0:
                     being_a, being_b = random.sample(beings, 2)
-                    new_being_genes = sexual_reproduction(being_a, being_b)
-                    b = Being(starting_coordinate, self.gene_length, genes=new_being_genes)
+                    new_gene_strings = sexual_reproduction(being_a, being_b)
+                    b = Being(starting_coordinates=starting_coordinate, 
+                                gene_length=self.gene_length, 
+                                genes=new_gene_strings)
                 else:
-                    b = Being(starting_coordinate, self.gene_length)
+                    b = Being(starting_coordinates=starting_coordinate, 
+                                gene_length=self.gene_length)
+               
+                b.genome.set_quick_access_arrays()
                 b.set_neuron_blueprints(self.neuronFactory.make_neurons_for_being())
-                populated = self.board.populate_space(b)
+                populated = self.board.populate_space(b) and self.population.being_is_valid(b)
             self.population.add_being(b)
 
 
