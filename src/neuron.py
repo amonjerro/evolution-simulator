@@ -97,6 +97,11 @@ class NeuronFactory:
 class Gene:
     # A gene is a connection between two neurons
     def __init__(self, hex_string=None):
+        self.SENSOR_INDEX = 1
+        self.SPEC_SENSOR_INDEX = 0
+        self.INTERNAL_INDEX = 1
+        self.ACTION_INDEX = 3
+        self.SPEC_ACTION_INDEX = 2
         if hex_string:
             self.gene_string = hex_string
         else:
@@ -107,13 +112,13 @@ class Gene:
         return blueprint[key][rounds%neuron_type_length]
 
     def is_sensor(self):
-        return int(self.gene_string[0],16) % 2 == 0
+        return int(self.gene_string[self.SENSOR_INDEX],16) % 2 == 0
     
     def is_internal(self):
-        return int(self.gene_string[0],16) % 2 == 1
+        return int(self.gene_string[self.INTERNAL_INDEX],16) % 2 == 1
         
     def is_action(self):
-        return int(self.gene_string[2],16)%2==0
+        return int(self.gene_string[self.ACTION_INDEX],16)%2==0
 
     def feed_forward(self, params, blueprint, excitability):
         origin, target, sensitivity = self.decode(blueprint)
@@ -128,10 +133,7 @@ class Gene:
     
     def enact(self, blueprint, excitability):
         origin, action, _ = self.decode(blueprint)
-        try:
-            act_results = action.act(excitability)
-        except AttributeError:
-            exit(400)
+        act_results = action.act(excitability)
         action.set_activation(0)
         return act_results
 
@@ -140,10 +142,10 @@ class Gene:
         origin = None
         target = None
 
-        origin_neuron_type = int(self.gene_string[0],16)
-        origin_rounds = int(self.gene_string[1],16)
-        target_neuron_type = int(self.gene_string[2],16)
-        target_rounds = int(self.gene_string[3], 16)
+        origin_neuron_type = int(self.gene_string[self.SENSOR_INDEX], 16)
+        origin_rounds = int(self.gene_string[self.SPEC_SENSOR_INDEX], 16)
+        target_neuron_type = int(self.gene_string[self.ACTION_INDEX], 16)
+        target_rounds = int(self.gene_string[self.SPEC_ACTION_INDEX], 16)
         connection_sensitivity = int(self.gene_string[-2:],16) / 128
 
         origin_key = ''

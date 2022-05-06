@@ -1,12 +1,9 @@
 import random
 
 from src.board import Coordinate
-from src.neuron import Gene
-
-def pad_zeroes(value, min_length):
-    zeroes = '0'*min_length
-    return zeroes[:-len(value)]+value
-
+from src.neuron import Gene, Neuron
+from src.utils import pad_zeroes
+from src.behavior_constants import NeuronEnum 
 
 class Genome:
     def __init__(self, genes, gene_length=0):
@@ -37,9 +34,26 @@ class Genome:
         self.blueprints = blueprints
 
     def genes_to_color(self):
-        total = sum([int(gene.gene_string, 16) for gene in self.genes])
-        hexval = hex(int(total/len(self.genes)))[2:]
-        return f'#{pad_zeroes(hexval, 6)}'
+        sensor_index = self.genes[0].SPEC_SENSOR_INDEX
+        action_index = self.genes[0].SPEC_ACTION_INDEX
+        sensor_length = len(self.blueprints[NeuronEnum.SENSOR])
+        action_length = len(self.blueprints[NeuronEnum.ACTION])
+        
+        sensor_strings = [sensor.gene_string for sensor in self.sensors]
+        action_strings = [action.gene_string for action in self.actions]
+        
+        moduloed_sensors = sum([int(s[sensor_index],16) for s in sensor_strings]) % sensor_length
+        moduloed_actions = sum([int(a[action_index],16) for a in action_strings]) % action_length
+        average_excitation = sum([int(gene.gene_string[-2:],16) for gene in self.genes])/len(self.genes)
+        average_excitation -= 64
+        if average_excitation < 0:
+            average_excitation = 0 
+
+        sensor_val = hex(moduloed_sensors)[2:]
+        action_val = hex(moduloed_actions)[2:]
+        excitation_val = pad_zeroes(hex(int(average_excitation))[2:],2)
+        new_string = f'#{sensor_val}0{action_val}0{excitation_val}' 
+        return new_string
     
     def set_quick_access_arrays(self):
         for gene in self.genes:
@@ -101,27 +115,36 @@ class PopulationSingleton(object):
         if not hasattr(cls, 'instance'):
             cls.instance = super(PopulationSingleton, cls).__new__(cls)
         return cls.instance
+    
     def config(self, config):
         self.population_size = config['population-size']
         self.being_list = []
+    
     def get_population_size(self):
         return self.population_size
+    
     def being_is_valid(self, being):
         genome = being.get_genome()
         return len(genome.sensors) > 0 and len(genome.actions) > 0
+    
     def inspect_being(self, index):
         being = self.being_list[index]
         being.print_self()
         return self.being_list[index]
+    
     def get_beings(self):
         return self.being_list
+    
     def execute_senses(self):
         for being in self.being_list:
             being.activate_senses()
+    
     def process_internal_signals(self):
         for being in self.being_list:
             being.process_internals()
+    
     def add_being(self, being):
         self.being_list.append(being)
+    
     def wipe(self):
         del self.being_list[:]

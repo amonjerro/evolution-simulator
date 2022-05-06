@@ -2,10 +2,13 @@ class Coordinate:
     def __init__(self,x,y):
         self.x = x
         self.y = y
+ 
     def __str__(self):
         return str((self.x,self.y))
+ 
     def unpack(self):
         return (self.x, self.y)
+ 
     def add(self, other):
         self.x += other.x
         self.y += other.y
@@ -15,6 +18,7 @@ class BoardSingleton(object):
         if not hasattr(cls, 'instance'):
             cls.instance = super(BoardSingleton, cls).__new__(cls)
         return cls.instance
+    
     def config(self, config):
         self.board = []
         for i in range(config['board-size']):
@@ -41,13 +45,16 @@ class BoardSingleton(object):
         coordinate_contents = self.board[coordinate.y][coordinate.x]
         if coordinate_contents is None:
             return False
+
     def populate_space(self, being):
         if not self.is_occupied(being.get_position()):
             self.board[being.y][being.x] = being
             return True
         return False
+
     def depopulate_space(self, coordinate):
         self.board[coordinate.y][coordinate.x] = None
+
     def wipe(self):
         del self.board[:]
         for i in range(self.y_dim):

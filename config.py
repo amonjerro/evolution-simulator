@@ -6,7 +6,7 @@ CONFIG = {
     'population-size':200,
     'max-generations':30,
     'max-steps':60,
-    'gene-length':6,
+    'gene-length':4,
     'internal-neurons':2,
     'action-threshold':0.75,
     'mutation-enabled':True,
