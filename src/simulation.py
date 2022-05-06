@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 from src.imager import ImageManagerSingleton
 from src.being import Being, PopulationSingleton
 from src.board import Coordinate, BoardSingleton
@@ -43,9 +44,13 @@ class Simulation:
             self.imager.draw_selection = self.imager.draw_circle_filter
 
     def check_diversity(self):
-        # Calculates a diversity metric for the population
-        # Stores it every generation ran
-        return 0
+        beings = self.population.get_beings()
+        counter = Counter()
+        for being in beings:
+            diversity_string = being.genome.genes_to_color()[1:5]
+            counter[diversity_string] += 1
+
+        return len(counter)
 
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()

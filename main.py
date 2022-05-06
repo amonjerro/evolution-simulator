@@ -10,3 +10,4 @@ if __name__ == '__main__':
     for i in range(CONFIG['max-generations']):
         sim.run_simulation_generation()
     ReportSingleton().plot_death_rate()
+    ReportSingleton().plot_diversity()

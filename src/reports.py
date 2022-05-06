@@ -28,3 +28,11 @@ class ReportSingleton:
 
     def get_death_rate(self, index):
         return self.generation_deaths[index]
+
+    def plot_diversity(self):
+        plt.title('Diversity by Generation')
+        plt.plot(
+            [i for i in range(len(self.generation_diversity))],
+            self.generation_diversity
+        )
+        plt.savefig(f'./{self.output_path}/reports/diversity.png')
