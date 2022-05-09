@@ -3,7 +3,7 @@ CONFIG = {
     'image-by-step':False,
     'being-size':3,
     'board-size':180,
-    'population-size':200,
+    'population-size':40,
     'max-generations':30,
     'max-steps':60,
     'gene-length':4,

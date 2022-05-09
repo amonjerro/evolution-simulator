@@ -89,13 +89,12 @@ class Simulation:
             for being in beings:
                 tentative_new_coordinate = being.act()
                 if self.board.is_valid_move(tentative_new_coordinate):
-                    #Update the being's coordinates
-                    old_coordinate = being.get_position()
-                    being.update_position(tentative_new_coordinate)
-                    #Populate the space
-                    self.board.populate_space(being)
-                    #Depopulate the old space
-                    self.board.depopulate_space(old_coordinate)
+                    self.board.collision_map_add(tentative_new_coordinate, being)
+                else:
+                    self.board.collision_map_add(being.get_position(), being)
+
+            for position in self.board.collision_map:
+                self.board.resolve_occupation(position)
 
         ## Function start
         self.imager.render_simulation_step(
@@ -112,6 +111,7 @@ class Simulation:
                 step+1, 
                 self.population.get_beings()
             )
+            self.board.collision_map_wipe()
         self.imager.draw_selection(self.criteria_shape)
         self.imager.make_gif_from_gen(self.current_generation)
 
@@ -119,7 +119,7 @@ class Simulation:
         survivors = self.criteria_function(self.criteria_shape)
         self.population.wipe()
         #Wipe the board
-        self.board.wipe()
+        self.board.board_wipe()
 
         #Gen Report
         diversity = self.check_diversity()
