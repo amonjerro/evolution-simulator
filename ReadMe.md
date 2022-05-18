@@ -8,7 +8,7 @@ This software populates a space with beings that are given a number of steps to 
 
 1. Sensors: Neurons that perceive aspects of the surrounding environment to gain activation values
 2. Internals: Neurons that are passed values from sensors or other internals
-3. Actions: Neurons that when excited beyond a threshold, cause the being to act in a certain way.
+3. Actions: Neurons that - when excited beyond a threshold - cause the being to act in a certain way.
 
 Beings are defined by a set of genes which are randomly populated in the first generation. A gene is a 6-character hexadecimal string that defines the links that exist between neurons for that being and, so, a being's genetics is a directed graph or network of these connections. Which character encodes what information is established in the `Gene` class.
 
