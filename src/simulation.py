@@ -8,7 +8,7 @@ from src.reports import ReportSingleton
 
 from src.selection_criteria import box_filter, circle_filter
 from src.utils import Rect, Circle
-from src.reproduction import sexual_reproduction
+from src.reproduction import REPRODUCTION_FUNCTION_MAP
 
 class Simulation:
     def __init__(self, config):
@@ -29,6 +29,7 @@ class Simulation:
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
         self.max_generations = config['max-generations']
+        self.reproduction_function = REPRODUCTION_FUNCTION_MAP[config['reproduction_function']]
         self.current_generation = 0
 
     def get_population(self):
@@ -63,7 +64,7 @@ class Simulation:
                         )
                 if beings is not None and len(beings)>0:
                     being_a, being_b = random.sample(beings, 2)
-                    new_gene_strings = sexual_reproduction(being_a, being_b)
+                    new_gene_strings = self.reproduction_function(being_a, being_b)
                     b = Being(starting_coordinates=starting_coordinate, 
                                 gene_length=self.gene_length, 
                                 genes=new_gene_strings)

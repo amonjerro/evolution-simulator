@@ -41,3 +41,25 @@ def sexual_reproduction(being_a, being_b, is_random=True):
             genes_from_b = being_b.get_genome().genes[haploid_length:]
             resulting_gene_strings = [ g.gene_string for g in genes_from_a+genes_from_b ]        
     return resulting_gene_strings
+
+def gene_mixing(being_a, being_b, is_random=True):
+    being_a_gene_strings = [gene.gene_string for gene in being_a.get_genome().genes]
+    being_b_gene_strings = [gene.gene_string for gene in being_b.get_genome().genes]
+    half_string_index = len(being_b_gene_strings[0]) // 2
+    resulting_gene_strings = []
+    if is_random:
+        #To Do
+        pass
+    else:        
+        for i in range(len(being_a_gene_strings)):   
+            gene_string_a = being_a_gene_strings[i]
+            gene_string_b = being_b_gene_strings[i]
+            
+            new_string = gene_string_a[:half_string_index] + gene_string_b[half_string_index:]
+            resulting_gene_strings.append(new_string)
+    return resulting_gene_strings
+
+REPRODUCTION_FUNCTION_MAP = {
+    'sexual_reproduction':sexual_reproduction,
+    'gene_mixing':gene_mixing
+} 
