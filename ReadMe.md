@@ -10,12 +10,12 @@ This software populates a space with beings that are given a number of steps to 
 2. Internals: Neurons that are passed values from sensors or other internals
 3. Actions: Neurons that when excited beyond a threshold, cause the being to act in a certain way.
 
-Beings are defined by a set of genes which are randomly populated in the first generation. A gene is a 6-character hexadecimal string that defines the links that exist between neurons for that being and, so, a being's genetics is a directed graph or network of these connections. The encoding logic for that string is as follows and we'll use the gene `25014f` as an example.
+Beings are defined by a set of genes which are randomly populated in the first generation. A gene is a 6-character hexadecimal string that defines the links that exist between neurons for that being and, so, a being's genetics is a directed graph or network of these connections. Which character encodes what information is established in the `Gene` class.
 
-1. The first character dictates whether the originating neuron is either a sensor or an internal neuron. Even values for the first character represent sensors. In the example gene, the originating neuron is a sensor.
-2. The second character represents _which_ neuron is the source and the value is modulo divided by total available neurons of that type. In the example, the selected sensor would be the 6th one and there are four sensors currently available, thus 6%4 would give sensor two or `SENSE_RIGHT_BORDER`. The full list of sensors can be found in the `src/behavior_constants.py` file.
-3. The third character dictates whether the target neuron is either an internal or an action. Even values for it represent actions. In the example gene, the target neuron in an action.
-4. The fourth character represents _which_ neuron is the target. The logic for it is identical to (2). In the example gene, the specific neuron is the second action or `MOVE_RIGHT`. The full list of actions can be found in the `src/behavior_constants.py` file.
+1. One character dictates whether the originating neuron is either a sensor or an internal neuron. Even values for said character represent sensors. As of now, odd values for this character indicate internal neurons.
+2. Another character represents _which_ neuron is the source and the value is modulo divided by total available neurons of that type. The full list of sensors can be found in the `src/behavior_constants.py` file.
+3. A third character dictates whether the target neuron is either an internal or an action. Even values for it represent actions.
+4. A fourth character represents _which_ neuron is the target. The logic for it is identical to (2).
 5. The last two characters represent how sensitive the connection is in the range of [0,2]. Excitability between 0 and 1 can be interpreted as an inhibitor gene as it dampens the activation signal passed through. Excitability between 1 and 2 can be interpreted as exciter genes, as they enhance the activation signal passed through. In the example, '4f' represents the value 79 in base 10. When divided by 128, this produces the excitability value of 0.62, so this is an inhibitor neuron.
 
 After the amount of steps to a generation are done, selection criteria are applied to determine the beings that will pass on their genes. The survivors then are sampled and new beings are created by mixing their genes. If enabled, mutations can happen during this process. The process is then repeated for as many generations as is specified in the config file.
@@ -48,8 +48,7 @@ Still to implement:
         - [X] Reproduction System
         - [X] Mutation System
     - [X] Multi generational runs
-    - [ ] Additional methods of reproduction (asexual, intra-gene splicing)
-    - [ ] Proper inhibitor genes
+    - [X] Inhibitor genes
 - Genetic Algorithm Implementations
     - [ ] More reproduction functions
     - [ ] More mutation variants than just replacement (further reading necessary)
