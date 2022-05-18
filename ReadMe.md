@@ -26,7 +26,7 @@ After the simulation is done, a GIF file for every generation will have been cre
 
 This is an example of the 29th generation of selecting using the red rectangle. 
 
-![generation_29](https://user-images.githubusercontent.com/9394777/166844888-70ba07c6-661d-4ee8-a205-a52e7e14e45d.gif)
+![generation_29](https://user-images.githubusercontent.com/9394777/168937804-743d2160-8afe-4ee0-81e5-5864598bbf85.gif)
 
 ## TO DO
 
@@ -51,6 +51,7 @@ Still to implement:
     - [ ] Additional methods of reproduction (asexual, intra-gene splicing)
     - [ ] Proper inhibitor genes
 - Genetic Algorithm Implementations
+    - [ ] More reproduction functions
     - [ ] More mutation variants than just replacement (further reading necessary)
 - Animate the generation
     - [X] Produce an image for every step
