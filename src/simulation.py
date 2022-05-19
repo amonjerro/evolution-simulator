@@ -74,7 +74,10 @@ class Simulation:
                
                 b.genome.set_quick_access_arrays()
                 b.set_neuron_blueprints(self.neuronFactory.make_neurons_for_being())
-                populated = self.board.populate_space(b) and self.population.being_is_valid(b)
+                
+                if self.population.being_is_valid(b):
+                    populated = self.board.populate_space(b)
+          
             self.population.add_being(b)
 
 

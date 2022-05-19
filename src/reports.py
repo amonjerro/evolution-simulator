@@ -19,6 +19,7 @@ class ReportSingleton:
         self.generation_diversity.append(generation_diversity)
 
     def plot_death_rate(self):
+        plt.clf()
         plt.title('Deaths by Generation')
         plt.plot(
             [i for i in range(len(self.generation_deaths))], 
@@ -30,6 +31,7 @@ class ReportSingleton:
         return self.generation_deaths[index]
 
     def plot_diversity(self):
+        plt.clf()
         plt.title('Diversity by Generation')
         plt.plot(
             [i for i in range(len(self.generation_diversity))],
