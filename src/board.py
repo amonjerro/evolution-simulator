@@ -84,9 +84,7 @@ class BoardSingleton(object):
     def is_occupied(self, coordinate):
         # Check if another being exists in the target coordinate
         coordinate_contents = self.board[coordinate.y][coordinate.x]
-        if coordinate_contents is None:
-            return False
-        return True
+        return coordinate_contents is None
 
     def populate_space(self, being):
         if not self.is_occupied(being.get_position()):
