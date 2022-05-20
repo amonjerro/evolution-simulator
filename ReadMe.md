@@ -55,11 +55,11 @@ Still to implement:
 - Animate the generation
     - [X] Produce an image for every step
     - [X] Join the images into a single animated file
-- Generational Reports
+- Visualizations
     - [ ] Graphs showing: 
         - [ ] Genetic diversity
         - [X] Mortality Rate
-
+    - [ ] Neuron Networks
 
 ## How to run
 
