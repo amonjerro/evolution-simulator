@@ -22,11 +22,21 @@ After the amount of steps to a generation are done, selection criteria are appli
 
 After the simulation is done, a GIF file for every generation will have been created in the `/gen_gifs` directory of the specified output path. Along with this, other reports can be found in the `/reports` under the same output path. 
 
-## Example Generation
+## Example Outputs
 
-This is an example of the 29th generation of selecting using the red rectangle. 
+For a particular simulation, this is the first generation. The red area represents which beings will survive.
 
-![generation_29](https://user-images.githubusercontent.com/9394777/168937804-743d2160-8afe-4ee0-81e5-5864598bbf85.gif)
+![generation_0](https://user-images.githubusercontent.com/9394777/169456944-8346e0c9-615c-4594-878e-21218b7ce95a.gif)
+
+
+This is a visualization of the 29th generation of selecting using the red rectangle. 
+
+![generation_29](https://user-images.githubusercontent.com/9394777/169456969-b33880b9-123e-4803-97c5-442ab796e99a.gif)
+
+And this is a look into the genetic network of one of those beings. The network visualizer needs some love still but the gist is that this being has two sensors: SENSE_LEFT_BORDER and SENSE_LOWER_BORDER and they feed MOVE_LEFT and MOVE_LEFT and MOVE_UP respectively.
+
+![being30_network](https://user-images.githubusercontent.com/9394777/169457437-fc5dd14b-3064-48fe-875f-9e668b04bb3b.png)
+
 
 ## TO DO
 
@@ -59,7 +69,7 @@ Still to implement:
     - [ ] Graphs showing: 
         - [ ] Genetic diversity
         - [X] Mortality Rate
-    - [ ] Neuron Networks
+    - [X] Neuron Networks
 
 ## How to run
 
