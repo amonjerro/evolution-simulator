@@ -33,7 +33,7 @@ This is a visualization of the 29th generation of selecting using the red rectan
 
 ![generation_29](https://user-images.githubusercontent.com/9394777/169456969-b33880b9-123e-4803-97c5-442ab796e99a.gif)
 
-And this is a look into the genetic network of one of those beings. The network visualizer needs some love still but the gist is that this being has two sensors: SENSE_LEFT_BORDER and SENSE_LOWER_BORDER and they feed MOVE_LEFT and MOVE_LEFT and MOVE_UP respectively.
+And this is a look into the genetic network of one of those beings. The network visualizer needs some love still but the gist is that this being has two sensors: SENSE_LOWER_BORDER and SENSE_LEFT_BORDER and they feed MOVE_LEFT and MOVE_LEFT and MOVE_UP respectively.
 
 ![being30_network](https://user-images.githubusercontent.com/9394777/169457437-fc5dd14b-3064-48fe-875f-9e668b04bb3b.png)
 
