@@ -1,5 +1,10 @@
 import os
+import networkx as nx
+import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
+
+from src.neuron import NeuronFactory
+
 
 class ImageManagerSingleton(object):
     def __new__(cls):
@@ -80,4 +85,12 @@ class ImageManagerSingleton(object):
             )
         del self.frames[:]
 
-    
+    def display_genome(self, being):
+        plt.clf()
+        neuron_digraph = NeuronFactory().make_neuron_graph()
+        genome = being.get_genome()
+        for gene in genome.genes:
+            origin, target, sensitivity = gene.decode(genome.blueprints)
+            neuron_digraph.add_edge(origin.name, target.name, weight=sensitivity)
+        nx.draw_networkx(neuron_digraph)
+        plt.savefig(f'./{self.output_path}/reports/being_network.png')

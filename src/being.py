@@ -1,7 +1,7 @@
 import random
 
 from src.board import Coordinate
-from src.neuron import Gene, Neuron
+from src.neuron import Gene
 from src.utils import pad_zeroes
 from src.behavior_constants import NeuronEnum 
 
@@ -16,14 +16,6 @@ class Genome:
         self.sensors = []
         self.actions = []
         self.internals = []
-    
-    def print_genome(self):
-        print('===== Printing Genome =====')
-        for gene in self.genes:
-            origin, target, sensitivity = gene.decode(self.blueprints)
-            print(f'Origin: {origin.name}, Activation: {origin.get_activation()}')
-            print(f'Target: {target.name}, Activation: {target.get_activation()}')
-            print(f'Connection Sensitivity: {sensitivity}')
 
     def create_random(self, gene_length):
         self.genes = []

@@ -1,5 +1,6 @@
 import secrets
 import math
+import networkx as nx
 
 from src.errors import UndefinedNeuronError
 from src.behavior_constants import ACTION_FUNCTIONS, ActionEnum, no_op
@@ -57,7 +58,11 @@ class Internal(Neuron):
     pass
 
 class NeuronFactory:
-    def __init__(self, config):
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(NeuronFactory, cls).__new__(cls)
+        return cls.instance
+    def config(self, config):
         self.sensor = Sensor
         self.internal = Internal
         self.action = Action
@@ -92,6 +97,16 @@ class NeuronFactory:
             blueprint[NeuronEnum.INTERNAL].append(internal)
 
         return blueprint
+
+    def make_neuron_graph(self):
+        DG = nx.DiGraph()
+        for sEnumElement in SensorEnum:
+            DG.add_node(sEnumElement.name)
+        for n in range(self.internal_neuron_limit):
+            DG.add_node(f'INTERNAL {n}')
+        for aEnumElement in ActionEnum:
+            DG.add_node(aEnumElement.name)
+        return DG
 
 
 class Gene:

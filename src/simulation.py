@@ -25,7 +25,9 @@ class Simulation:
         self.reports = ReportSingleton()
         self.reports.config(config)
 
-        self.neuronFactory = NeuronFactory(config)
+        self.neuronFactory = NeuronFactory()
+        self.neuronFactory.config(config)
+        
         self.gene_length = config['gene-length']
         self.max_steps = config['max-steps']
         self.max_generations = config['max-generations']
