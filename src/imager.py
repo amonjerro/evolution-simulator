@@ -85,7 +85,7 @@ class ImageManagerSingleton(object):
             )
         del self.frames[:]
 
-    def display_genome(self, being):
+    def display_genome(self, being, index):
         plt.clf()
         neuron_digraph = NeuronFactory().make_neuron_graph()
         genome = being.get_genome()
@@ -93,4 +93,4 @@ class ImageManagerSingleton(object):
             origin, target, sensitivity = gene.decode(genome.blueprints)
             neuron_digraph.add_edge(origin.name, target.name, weight=sensitivity)
         nx.draw_networkx(neuron_digraph)
-        plt.savefig(f'./{self.output_path}/reports/being_network.png')
+        plt.savefig(f'./{self.output_path}/reports/being{index}_network.png')
