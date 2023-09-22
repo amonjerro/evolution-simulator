@@ -89,10 +89,10 @@ class ImageManagerSingleton(object):
         plt.clf()
         nFac = NeuronFactory()
         neuron_digraph = nFac.make_neuron_graph()
-        neuron_position_spec = nFac.make_neuron_positions()
+        neuron_position_spec, color_map = nFac.decorate_neurons_for_drawing()
         genome = being.get_genome()
         for gene in genome.genes:
             origin, target, sensitivity = gene.decode(genome.blueprints)
             neuron_digraph.add_edge(origin.name, target.name, weight=sensitivity)
-        nx.draw_networkx(neuron_digraph, neuron_position_spec)
+        nx.draw_networkx(neuron_digraph, neuron_position_spec, node_color=color_map, node_size=50)
         plt.savefig(f'./{self.output_path}/reports/being{index}_network.png')

@@ -108,22 +108,26 @@ class NeuronFactory:
             DG.add_node(aEnumElement.name)
         return DG
     
-    def make_neuron_positions(self):
+    def decorate_neurons_for_drawing(self):
         neuron_position_spec = {}
+        color_map = []
         x_margin = y_margin = 100
         sensorCount = len(SensorEnum)
         actionCount = len(ActionEnum)
         counter = 0
         for sEnumElement in SensorEnum:
+            color_map.append('blue')
             neuron_position_spec[sEnumElement.name] = (x_margin * 1.8, counter * y_margin)
             counter += 1
         counter = 0
         for i in range(self.internal_neuron_limit):
+            color_map.append('grey')
             neuron_position_spec[f'INTERNAL {i}'] = (x_margin * 2, (i+1) * y_margin)
         for aEnumElement in ActionEnum:
+            color_map.append('red')
             neuron_position_spec[aEnumElement.name] = (x_margin * 2.3, counter * y_margin)
             counter += 1
-        return neuron_position_spec
+        return (neuron_position_spec, color_map)
 
 class Gene:
     # A gene is a connection between two neurons
