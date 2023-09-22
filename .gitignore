@@ -1,8 +1,11 @@
 __pycache__/*
 */__pycache__/*
 
+
 venv/*
+env/*
 outs/*
 
 Thumbs.db
 .DS_Store
+.vs

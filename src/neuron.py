@@ -107,7 +107,23 @@ class NeuronFactory:
         for aEnumElement in ActionEnum:
             DG.add_node(aEnumElement.name)
         return DG
-
+    
+    def make_neuron_positions(self):
+        neuron_position_spec = {}
+        x_margin = y_margin = 100
+        sensorCount = len(SensorEnum)
+        actionCount = len(ActionEnum)
+        counter = 0
+        for sEnumElement in SensorEnum:
+            neuron_position_spec[sEnumElement.name] = (x_margin * 1.8, counter * y_margin)
+            counter += 1
+        counter = 0
+        for i in range(self.internal_neuron_limit):
+            neuron_position_spec[f'INTERNAL {i}'] = (x_margin * 2, (i+1) * y_margin)
+        for aEnumElement in ActionEnum:
+            neuron_position_spec[aEnumElement.name] = (x_margin * 2.3, counter * y_margin)
+            counter += 1
+        return neuron_position_spec
 
 class Gene:
     # A gene is a connection between two neurons

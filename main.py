@@ -12,7 +12,9 @@ if __name__ == '__main__':
 
     print('Running the simulation')
     for i in range(CONFIG['max-generations']):
+        print(f'Running generation {i}', end='\r')
         sim.run_simulation_generation()
+    print()
     
     print('Preparing Reports')
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[0], 0)
