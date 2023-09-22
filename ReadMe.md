@@ -33,10 +33,10 @@ This is a visualization of the 29th generation of selecting using the red rectan
 
 ![generation_29](https://user-images.githubusercontent.com/9394777/169456969-b33880b9-123e-4803-97c5-442ab796e99a.gif)
 
-And this is a look into the genetic network of one of those beings. The network visualizer needs some love still but the gist is that this being has two sensors: SENSE_TOP_BORDER which feeds to an internal neuron that isn't connected to anything as well as the MOVE_LEFT and MOVE_DOWN actions. The other sensor is a SENSE_RIGHT_BORDER sensor which feeds a MOVE_RANDOM action.
+And this is a look into the genetic network of one of those beings. This current image shows some problems with the neuron creation algorithm that are intended to be sorted out soon.
 
+![being0_network](https://github.com/amonjerro/evolution-simulator/assets/9394777/5f136900-ebb7-4b31-a875-3bcbdab83b01)
 
-![FTLUS9aXsAEnkBj](https://user-images.githubusercontent.com/9394777/169598220-61b58b82-05e4-44bc-8b1d-45d0f0e175a5.png)
 
 
 ## TO DO
