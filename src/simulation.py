@@ -55,6 +55,7 @@ class Simulation:
 
         return len(counter)
 
+    @performance_check("pop_board", "Populate the board")
     def populate_board(self, beings=None):
         dimensions = self.board.get_dimensions()
         for i in range(self.population.get_population_size()):

@@ -2,6 +2,8 @@ import os
 import networkx as nx
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
+from src.Reports import performance
+from src.Reports.performance import performance_check
 
 from src.neuron import NeuronFactory
 
@@ -27,6 +29,7 @@ class ImageManagerSingleton(object):
         if self.image_by_step and 'sim_steps' not in [i.name for i in os.scandir(f'./{self.output_path}')]:
             os.mkdir(f'./{self.output_path}/sim_steps') 
 
+    @performance_check('render_step', "Render a simulation step", "sim_step")
     def render_simulation_step(self, gen, step, beings):
         im = Image.new("RGB", self.image_size, (255,255,255, 255))
         draw = ImageDraw.Draw(im, 'RGBA')
@@ -74,7 +77,7 @@ class ImageManagerSingleton(object):
             ],
             fill=(125, 0, 0, 60))
 
-
+    @performance_check('create_gif', "Turn the images into a gif", "sim_step")
     def make_gif_from_gen(self, gen):
         self.frames[0].save(
             f'./{self.output_path}/gen_gifs/generation_{gen}.gif',

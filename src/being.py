@@ -1,9 +1,12 @@
 import random
+from src.Reports import performance
+
 
 from src.board import Coordinate
 from src.neuron import Gene
 from src.Utils import pad_zeroes
 from src.behavior_constants import NeuronEnum, SensorInformationStruct
+from src.Reports.performance import performance_check
 
 class Genome:
     def __init__(self, genes, gene_length=0):
@@ -133,10 +136,12 @@ class PopulationSingleton(object):
     def get_beings(self):
         return self.being_list
     
+    @performance_check('sense', "Obtain sensor information", "sim_step")
     def execute_senses(self):
         for being in self.being_list:
             being.activate_senses()
     
+    @performance_check('internals', "Process all internal signals", "sim_step")
     def process_internal_signals(self):
         for being in self.being_list:
             being.process_internals()
