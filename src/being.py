@@ -3,7 +3,7 @@ import random
 from src.board import Coordinate
 from src.neuron import Gene
 from src.utils import pad_zeroes
-from src.behavior_constants import NeuronEnum 
+from src.behavior_constants import NeuronEnum, SensorInformationStruct
 
 class Genome:
     def __init__(self, genes, gene_length=0):
@@ -16,6 +16,9 @@ class Genome:
         self.sensors = []
         self.actions = []
         self.internals = []
+    
+    def __str__(self):
+        return str(list(map(str,self.genes)))
 
     def create_random(self, gene_length):
         self.genes = []
@@ -62,6 +65,8 @@ class Being:
     def __init__(self, starting_coordinates, gene_length, genes=None):
         self.x = starting_coordinates.x
         self.y = starting_coordinates.y
+        self.age = 0
+        self.lastMoveDirection = Coordinate(0,0)
         self.excitability = random.uniform(0.5,1.5)
         self.genome = Genome(gene_length=gene_length, genes=genes)
 
@@ -94,7 +99,8 @@ class Being:
     def activate_senses(self):
         senses = self.genome.sensors
         for sense in senses:
-            sense.feed_forward(self.get_position(), self.genome.blueprints, self.excitability)
+            sensorInfo = SensorInformationStruct(self)
+            sense.feed_forward(sensorInfo, self.genome.blueprints, self.excitability)
 
     def process_internals(self):
         internals = self.genome.internals

@@ -141,6 +141,9 @@ class Gene:
             self.gene_string = hex_string
         else:
             self.gene_string = secrets.token_hex(3)
+    
+    def __str__(self):
+        return self.gene_string
 
     def _get_neuron_from_blueprint(self, blueprint, key, rounds):
         neuron_type_length = len(blueprint[key])

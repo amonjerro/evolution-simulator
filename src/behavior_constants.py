@@ -5,6 +5,7 @@ from enum import Enum
 from src.board import Coordinate
 
 WORLD_SIZE = CONFIG['board-size']
+MAX_AGE = CONFIG['max-steps']
 
 class NeuronEnum(Enum):
     SENSOR=1
@@ -19,32 +20,44 @@ class ActionEnum(Enum):
     MOVE_RANDOM=5
 
 class SensorEnum(Enum):
-    SENSE_TOP_BORDER=1
-    SENSE_RIGHT_BORDER=2
-    SENSE_LOWER_BORDER=3
-    SENSE_LEFT_BORDER=4
+    TOP_BORDER=1
+    RIGHT_BORDER=2
+    LOWER_BORDER=3
+    LEFT_BORDER=4
+    AGE=5
+
+
+class SensorInformationStruct:
+    def __init__(self, being):
+        self.position = being.get_position()
+        self.age = being.age
 
 ## SENSORS ##
 
 #Normalize the position of the being in relation to the world.
 #Sensor range: [0-1]
-def sense_left_border(coordinate):
-    return (WORLD_SIZE-coordinate.x)/WORLD_SIZE
+def sense_left_border(sensorInfo):
+    return (WORLD_SIZE-sensorInfo.position.x)/WORLD_SIZE
 
-def sense_right_border(coordinate):
-    return coordinate.x/WORLD_SIZE
+def sense_right_border(sensorInfo):
+    return sensorInfo.position.x/WORLD_SIZE
 
-def sense_top_border(coordinate):
-    return (WORLD_SIZE-coordinate.y)/WORLD_SIZE
+def sense_top_border(sensorInfo):
+    return (WORLD_SIZE-sensorInfo.position.y)/WORLD_SIZE
 
-def sense_lower_border(coordinate):
-    return coordinate.y/WORLD_SIZE
+def sense_lower_border(sensorInfo):
+    return sensorInfo.position.y/WORLD_SIZE
+
+def sense_age(sensorInfo):
+    return sensorInfo.age / MAX_AGE
+
 
 SENSOR_FUNCTIONS={
-    SensorEnum.SENSE_TOP_BORDER:sense_top_border,
-    SensorEnum.SENSE_LOWER_BORDER:sense_lower_border,
-    SensorEnum.SENSE_RIGHT_BORDER:sense_right_border,
-    SensorEnum.SENSE_LEFT_BORDER:sense_left_border
+    SensorEnum.TOP_BORDER:sense_top_border,
+    SensorEnum.LOWER_BORDER:sense_lower_border,
+    SensorEnum.RIGHT_BORDER:sense_right_border,
+    SensorEnum.LEFT_BORDER:sense_left_border,
+    SensorEnum.AGE:sense_age
 }
 
 ## ACTIONS ##

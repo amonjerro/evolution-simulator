@@ -94,5 +94,6 @@ class ImageManagerSingleton(object):
         for gene in genome.genes:
             origin, target, sensitivity = gene.decode(genome.blueprints)
             neuron_digraph.add_edge(origin.name, target.name, weight=sensitivity)
-        nx.draw_networkx(neuron_digraph, neuron_position_spec, node_color=color_map, node_size=50)
+        nx.draw_networkx(neuron_digraph, neuron_position_spec, node_color=color_map, node_size=50, font_size=8)
+        plt.title(str(being.get_genome()))
         plt.savefig(f'./{self.output_path}/reports/being{index}_network.png')
