@@ -1,5 +1,5 @@
 import time
-
+import config
 
 class PerformanceInformation:
     def __init__(self, tag='', description='', timeTaken=0):
@@ -39,6 +39,8 @@ class Performance:
             return
         self.performance_evaluations[parent_tag].subTasks[tag].time = value
     def print_performance(self):
+        if not config.CONFIG['performance-profile']:
+            return
         print('====== Performance Evaluation =======')
         for tag in self.tags:
             perfEval = self.performance_evaluations[tag]
@@ -53,6 +55,8 @@ class Performance:
 def performance_check(tag, description, parent_tag=''):
     def function_handler(f):
         def time_evaluation_wrapper(*args, **kwargs):
+            if not config.CONFIG['performance-profile']:
+                return f(*args, **kwargs)
             pI = PerformanceInformation(tag, description)
             Performance().add_performance_evaluation(pI, parent_tag)
             

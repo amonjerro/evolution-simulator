@@ -11,5 +11,6 @@ CONFIG = {
     'action-threshold':0.75,
     'mutation-enabled':True,
     'mutation-chance':0.05,
-    'reproduction_function':'sexual_reproduction'
+    'reproduction_function':'sexual_reproduction',
+    'performance-profile':True
 }

@@ -121,3 +121,4 @@ To edit some of the parameters of the simulation, edit the config.py file of the
 - action-threshold: The value needed to excite an action neuron. 
 - mutation-enabled: Boolean flag to allow for beings to mutate on reproduction
 - mutation-chance: Mutation chance per gene.
+- performance-profile: Boolean to configure whether or not to profile the time performance of the simulation. 
