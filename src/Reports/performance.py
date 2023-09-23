@@ -30,8 +30,6 @@ class Performance:
         return self.tags
     def print_performance(self):
         print('====== Performance Evaluation =======')
-        print(self.tags)
-        print(self.performance_evaluations)
         for tag in self.tags:
             print(self.performance_evaluations[tag].description)
             print(f'Time taken: {self.performance_evaluations[tag].time} s')
