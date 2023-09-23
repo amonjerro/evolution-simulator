@@ -33,7 +33,7 @@ This is a visualization of the 29th generation of selecting using the red rectan
 
 ![generation_29](https://user-images.githubusercontent.com/9394777/169456969-b33880b9-123e-4803-97c5-442ab796e99a.gif)
 
-And this is a look into the genetic network of one of those beings. Sensor neurons are shown in blue, internals in gray and action neurons in red. However, the graph shows some issues in neuron creation, in which sensors are connected directly to actions which should not happen.
+And this is a look into the genetic network of one of those beings. Sensor neurons are shown in blue, internals in gray and action neurons in red.
 
 ![being10_network](https://github.com/amonjerro/evolution-simulator/assets/9394777/6c254c81-a779-44d7-a13d-2c2f279f4049)
 
