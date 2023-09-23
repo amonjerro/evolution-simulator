@@ -10,7 +10,9 @@ from src.neuron import NeuronFactory
 
 from src.imager import ImageManagerSingleton
 
-from src.reports import ReportSingleton
+from src.Reports import ReportSingleton
+from src.Reports import Performance
+from src.Reports import performance_check
 
-from src.utils import Rect
-from src.utils import Circle
+from src.Utils import Rect
+from src.Utils import Circle

@@ -2,10 +2,12 @@ from config import CONFIG
 from src import Simulation
 from src import Rect
 from src import ImageManagerSingleton
-from src.reports import ReportSingleton
+from src import ReportSingleton
+from src import Performance
 
 if __name__ == '__main__':
     print('Initializing')
+    Performance().config()
     sim = Simulation(CONFIG)
     sim.set_selection_criteria(Rect(0,0, CONFIG['board-size']/3,CONFIG['board-size']))
     sim.populate_board()
@@ -23,3 +25,5 @@ if __name__ == '__main__':
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[30], 30)
     ReportSingleton().plot_death_rate()
     ReportSingleton().plot_diversity()
+    
+    Performance().print_performance()

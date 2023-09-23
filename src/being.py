@@ -2,7 +2,7 @@ import random
 
 from src.board import Coordinate
 from src.neuron import Gene
-from src.utils import pad_zeroes
+from src.Utils import pad_zeroes
 from src.behavior_constants import NeuronEnum, SensorInformationStruct
 
 class Genome:

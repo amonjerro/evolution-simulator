@@ -4,10 +4,10 @@ from src.imager import ImageManagerSingleton
 from src.being import Being, PopulationSingleton
 from src.board import Coordinate, BoardSingleton
 from src.neuron import NeuronFactory
-from src.reports import ReportSingleton
+from src.Reports import ReportSingleton, performance_check
 
 from src.selection_criteria import box_filter, circle_filter
-from src.utils import Rect, Circle
+from src.Utils import Rect, Circle
 from src.reproduction import REPRODUCTION_FUNCTION_MAP
 
 class Simulation:
@@ -82,7 +82,7 @@ class Simulation:
           
             self.population.add_being(b)
 
-
+    @performance_check('sim_step', 'Running a simulation step')
     def run_simulation_generation(self):
 
         def _run_simulation_step(self):

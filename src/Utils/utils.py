@@ -10,7 +10,6 @@ class Circle:
         x = center_x
         y = center_y
         r = radius
-    
 
 def pad_zeroes(value, min_length):
     zeroes = '0'*min_length
