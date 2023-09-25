@@ -91,6 +91,7 @@ class Being:
         print(f'Location:({self.x},{self.y})')
         self.genome.print_genome()
 
+    @performance_check('act', 'Beings acting', 'sim_step')
     def act(self):
         actions = self.genome.actions
         position_update = self.get_position()
