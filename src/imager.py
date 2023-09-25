@@ -20,7 +20,7 @@ class ImageManagerSingleton(object):
         self.being_size = config['being-size']
         self.image_size = (config['board-size']*self.being_size, config['board-size']*self.being_size)
         self.image_by_step = config['image-by-step']
-        self.frames = []
+        self.generation_frames = {}
         self.draw_selection = None
         if self.output_path not in [fo.name for fo in os.scandir()]:
             os.mkdir(f'./{self.output_path}')
@@ -36,7 +36,10 @@ class ImageManagerSingleton(object):
         for being in beings:
             self.draw_being(draw, being)
         
-        self.frames.append(im)
+        if self.generation_frames.get(gen, None) is None:
+            self.generation_frames[gen] = []
+
+        self.generation_frames[gen].append(im)
 
         #Conditional image rendering
         if self.image_by_step:
@@ -54,8 +57,8 @@ class ImageManagerSingleton(object):
             being.genome.genes_to_color()
             )
     
-    def draw_box_filter(self, rect):
-        for f in self.frames:
+    def draw_box_filter(self, rect, gen):
+        for f in self.generation_frames[gen]:
             draw = ImageDraw.Draw(f, 'RGBA')
             draw.rectangle((
                 rect.x1 * self.being_size,
@@ -65,8 +68,8 @@ class ImageManagerSingleton(object):
             ),
             fill=(125,0,0,60))
     
-    def draw_circle_filter(self, circle):
-        for f in self.frames:
+    def draw_circle_filter(self, circle, gen):
+        for f in self.generation_frames[gen]:
             draw = ImageDraw.Draw(f, 'RGBA')
             draw.ellipse([
                 (circle.x * self.being_size, circle.y * self.being_size),
@@ -77,16 +80,15 @@ class ImageManagerSingleton(object):
             ],
             fill=(125, 0, 0, 60))
 
-    @performance_check('create_gif', "Turn the images into a gif", "sim_step")
+    @performance_check('create_gif', "Turn the images into a gif")
     def make_gif_from_gen(self, gen):
-        self.frames[0].save(
+        self.generation_frames[gen][0].save(
             f'./{self.output_path}/gen_gifs/generation_{gen}.gif',
             save_all=True,
-            append_images=self.frames[1:],
-            duration=(self.MAX_GIF_DURATION/len(self.frames)),
+            append_images=self.generation_frames[gen][1:],
+            duration=(self.MAX_GIF_DURATION/len(self.generation_frames[gen])),
             loop=0
             )
-        del self.frames[:]
 
     def display_genome(self, being, index):
         plt.clf()

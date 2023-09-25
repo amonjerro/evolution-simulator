@@ -119,8 +119,7 @@ class Simulation:
                 self.population.get_beings()
             )
             self.board.collision_map_wipe()
-        self.imager.draw_selection(self.criteria_shape)
-        self.imager.make_gif_from_gen(self.current_generation)
+        self.imager.draw_selection(self.criteria_shape, self.current_generation)
 
         #Apply selection criteria
         survivors = self.criteria_function(self.criteria_shape)

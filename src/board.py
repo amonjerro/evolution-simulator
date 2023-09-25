@@ -1,3 +1,5 @@
+from src.Reports import performance_check
+
 class Coordinate:
     def __init__(self,x,y):
         self.x = x
@@ -49,6 +51,7 @@ class BoardSingleton(object):
             return False
         return True
 
+    @performance_check('board_occ', 'Resolve Occupations on the board', 'sim_step')
     def resolve_occupation(self, position_key):
         x,y = map(lambda x: int(x), position_key.split(','))
         position_coord = Coordinate(x,y)
@@ -98,6 +101,7 @@ class BoardSingleton(object):
     def collision_map_wipe(self):
         self.collision_map.clear()
 
+    @performance_check('wipe', 'Wipe the board clean', 'sim_step')
     def board_wipe(self):
         del self.board[:]
         self.collision_map.clear()

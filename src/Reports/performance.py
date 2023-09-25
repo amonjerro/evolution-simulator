@@ -4,6 +4,7 @@ import config
 class PerformanceInformation:
     def __init__(self, tag='', description='', timeTaken=0):
         self.time = timeTaken
+        self.times = 0
         self.tag = tag
         self.description = description
         self.subTasks = {}
@@ -35,9 +36,11 @@ class Performance:
 
     def set_time_value(self, tag, value, parent_tag=''):
         if parent_tag == '':
-            self.performance_evaluations[tag].time = value
+            self.performance_evaluations[tag].time += value
+            self.performance_evaluations[tag].times += 1
             return
-        self.performance_evaluations[parent_tag].subTasks[tag].time = value
+        self.performance_evaluations[parent_tag].subTasks[tag].time += value
+        self.performance_evaluations[parent_tag].subTasks[tag].times += 1
     def print_performance(self):
         if not config.CONFIG['performance-profile']:
             return
@@ -45,11 +48,14 @@ class Performance:
         for tag in self.tags:
             perfEval = self.performance_evaluations[tag]
             print(perfEval.description)
-            print(f'Time taken: {perfEval.time} s')
+            print(f'Total Time taken: {perfEval.time} s')
+            print(f'Average operation time: {perfEval.time / perfEval.times} s')
             for subTag in perfEval.subTaskTags:
                 subTask = perfEval.subTasks[subTag]
                 print(f'\t {subTask.description}')
-                print(f'\t Time taken: {subTask.time} s')
+                print(f'\t Total Time taken: {subTask.time} s')
+                print(f'\t Average operation time: {subTask.time / subTask.times} s')
+                
             print()
 
 def performance_check(tag, description, parent_tag=''):
