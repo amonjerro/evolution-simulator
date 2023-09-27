@@ -66,8 +66,8 @@ Still to implement:
     - [X] Produce an image for every step
     - [X] Join the images into a single animated file
 - Visualizations
-    - [ ] Graphs showing: 
-        - [ ] Genetic diversity
+    - [X] Graphs showing: 
+        - [X] Genetic diversity
         - [X] Mortality Rate
     - [X] Neuron Networks
 
