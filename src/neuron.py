@@ -6,6 +6,7 @@ from src.errors import UndefinedNeuronError
 from src.behavior_constants import ACTION_FUNCTIONS, ActionEnum, no_op
 from src.behavior_constants import SENSOR_FUNCTIONS, SensorEnum
 from src.behavior_constants import NeuronEnum
+from src.Reports import performance_check
 
 class Neuron:
     def __init__(self):
@@ -141,9 +142,13 @@ class Gene:
             self.gene_string = hex_string
         else:
             self.gene_string = secrets.token_hex(3)
+        self.is_dead_gene = False
     
     def __str__(self):
         return self.gene_string
+    
+    def set_as_dead(self):
+        self.is_dead_gene = True
 
     def _get_neuron_from_blueprint(self, blueprint, key, rounds):
         neuron_type_length = len(blueprint[key])
@@ -154,10 +159,18 @@ class Gene:
     
     def is_internal(self):
         return int(self.gene_string[self.INTERNAL_INDEX],16) % 2 == 1
-        
+    
+    def get_internal(self, blueprints, rounds):
+        internals_length = len(blueprints[NeuronEnum.INTERNAL])
+        return blueprints[NeuronEnum.INTERNAL][int(rounds, 16) % internals_length]
+    
+    def leads_to_internal(self):
+        return self.is_sensor and int(self.gene_string[self.ACTION_INDEX],16)%2==1
+
     def is_action(self):
         return int(self.gene_string[self.ACTION_INDEX],16)%2==0
 
+    @performance_check('ff', 'Feed Forward information', 'sim_step')
     def feed_forward(self, params, blueprint, excitability):
         origin, target, sensitivity = self.decode(blueprint)
 
@@ -172,9 +185,11 @@ class Gene:
     def enact(self, blueprint, excitability):
         origin, action, _ = self.decode(blueprint)
         act_results = action.act(excitability)
+        activation_value = action.get_activation()
         action.set_activation(0)
         return act_results
 
+    @performance_check('decode','Decode a gene string')
     def decode(self, blueprint):
         #The hexstring that contains all the information to describe the gene
         origin = None
@@ -184,7 +199,9 @@ class Gene:
         origin_rounds = int(self.gene_string[self.SPEC_SENSOR_INDEX], 16)
         target_neuron_type = int(self.gene_string[self.ACTION_INDEX], 16)
         target_rounds = int(self.gene_string[self.SPEC_ACTION_INDEX], 16)
-        connection_sensitivity = int(self.gene_string[-2:],16) / 128
+        
+        # Multiply by 1/128 rather than divide by 128 for a slightly (?) faster operation
+        connection_sensitivity = int(self.gene_string[-2:],16) * 0.0078125
 
         origin_key = ''
         if origin_neuron_type % 2 == 0:

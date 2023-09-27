@@ -31,38 +31,50 @@ class Genome:
     def set_blueprints(self, blueprints):
         self.blueprints = blueprints
 
-    def genes_to_color(self):
-        sensor_index = self.genes[0].SPEC_SENSOR_INDEX
-        action_index = self.genes[0].SPEC_ACTION_INDEX
-        sensor_length = len(self.blueprints[NeuronEnum.SENSOR])
-        action_length = len(self.blueprints[NeuronEnum.ACTION])
-        
+    @performance_check('gene_color', 'Address gene coloring')
+    def genes_to_color(self):        
         sensor_strings = [sensor.gene_string for sensor in self.sensors]
         action_strings = [action.gene_string for action in self.actions]
-        
-        moduloed_sensors = sum([int(s[sensor_index],16) for s in sensor_strings]) % sensor_length
-        moduloed_actions = sum([int(a[action_index],16) for a in action_strings]) % action_length
-        average_excitation = sum([int(gene.gene_string[-2:],16) for gene in self.genes])/len(self.genes)
-        average_excitation -= 64
-        if average_excitation < 0:
-            average_excitation = 0 
+        salient_excitation = -999
+        salient_gene = ''
+        for string in action_strings+sensor_strings:
+            string_excitation = int(string[:-2], 16)
+            if string_excitation > salient_excitation:
+                salient_excitation = string_excitation
+                salient_gene = string
 
-        sensor_val = hex(moduloed_sensors)[2:]
-        action_val = hex(moduloed_actions)[2:]
-        excitation_val = pad_zeroes(hex(int(average_excitation))[2:],2)
-        new_string = f'#{sensor_val}0{action_val}0{excitation_val}' 
+        new_string = f'#{salient_gene}' 
         return new_string
     
+    @performance_check('indexing', 'Index the genes for a being')
     def set_quick_access_arrays(self):
         for gene in self.genes:
             if gene.is_sensor():
                 self.sensors.append(gene)
             elif gene.is_internal():
                 self.internals.append(gene)
-            
             if gene.is_action():
                 self.actions.append(gene)
-
+    
+    @performance_check('dead_bois', "Detecting dead genes", 'pop_board')
+    def clear_dead_sensors(self):
+        dead_genes_found = False
+        
+        # Detect dead internals
+        available_internals = []
+        dead_sensors = []
+        for internal in self.internals:
+            if internal.is_action():
+                available_internals.append(internal.get_internal(self.blueprints, internal.gene_string[internal.SPEC_SENSOR_INDEX]))
+        for i in range(len(self.sensors)):
+            sense = self.sensors[i]
+            if sense.leads_to_internal() and sense.get_internal(self.blueprints, sense.gene_string[sense.SPEC_ACTION_INDEX]) not in available_internals:
+                sense.set_as_dead()
+                dead_sensors.append(i)
+                dead_genes_found = True
+        
+        for i in range(len(dead_sensors), 0, -1):
+            self.sensors.pop(dead_sensors[i-1])
 
 class Being:
     def __init__(self, starting_coordinates, gene_length, genes=None):
@@ -93,22 +105,19 @@ class Being:
 
     @performance_check('act', 'Beings acting', 'sim_step')
     def act(self):
-        actions = self.genome.actions
         position_update = self.get_position()
-        for action in actions:
+        for action in self.genome.actions:
             c = action.enact(self.genome.blueprints, self.excitability)
             position_update.add(c)
         return position_update
 
     def activate_senses(self):
-        senses = self.genome.sensors
-        for sense in senses:
-            sensorInfo = SensorInformationStruct(self)
+        sensorInfo = SensorInformationStruct(self)
+        for sense in self.genome.sensors:
             sense.feed_forward(sensorInfo, self.genome.blueprints, self.excitability)
 
     def process_internals(self):
-        internals = self.genome.internals
-        for internal in internals:
+        for internal in self.genome.internals:
             internal.feed_forward(None, self.genome.blueprints, self.excitability)
 
 
@@ -139,8 +148,7 @@ class PopulationSingleton(object):
     
     @performance_check('sense', "Obtain sensor information", "sim_step")
     def execute_senses(self):
-        for being in self.being_list:
-            being.activate_senses()
+        [being.activate_senses() for being in self.being_list]
     
     @performance_check('internals', "Process all internal signals", "sim_step")
     def process_internal_signals(self):

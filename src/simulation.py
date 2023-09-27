@@ -46,14 +46,15 @@ class Simulation:
             self.criteria_function = circle_filter
             self.imager.draw_selection = self.imager.draw_circle_filter
 
+    @performance_check('diversity', "Check the diversity status")
     def check_diversity(self):
         beings = self.population.get_beings()
         counter = Counter()
         for being in beings:
-            diversity_string = being.genome.genes_to_color()[1:5]
+            diversity_string = being.genome.genes_to_color()[1:]
             counter[diversity_string] += 1
 
-        return len(counter)
+        return len(counter.keys())
 
     @performance_check("pop_board", "Populate the board")
     def populate_board(self, beings=None):
@@ -82,6 +83,7 @@ class Simulation:
                     populated = self.board.populate_space(b)
           
             self.population.add_being(b)
+            b.genome.clear_dead_sensors()
 
     @performance_check('sim_step', 'Running a simulation step')
     def run_simulation_generation(self):
@@ -120,7 +122,8 @@ class Simulation:
             )
             self.board.collision_map_wipe()
         self.imager.draw_selection(self.criteria_shape, self.current_generation)
-
+        diversity = self.check_diversity()
+        
         #Apply selection criteria
         survivors = self.criteria_function(self.criteria_shape)
         self.population.wipe()
@@ -128,7 +131,6 @@ class Simulation:
         self.board.board_wipe()
 
         #Gen Report
-        diversity = self.check_diversity()
         deaths = self.population.get_population_size() - len(survivors)
         self.reports.add_generation_data(deaths, diversity)
 

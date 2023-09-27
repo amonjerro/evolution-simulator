@@ -23,11 +23,10 @@ if __name__ == '__main__':
         ImageManagerSingleton().make_gif_from_gen(i)
         
     print('Preparing Reports')
+    ReportSingleton().plot_death_rate()
+    ReportSingleton().plot_diversity()
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[0], 0)
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[10], 10)
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[20], 20)
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[30], 30)
-    ReportSingleton().plot_death_rate()
-    ReportSingleton().plot_diversity()
-    
     Performance().print_performance()
