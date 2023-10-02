@@ -1,4 +1,5 @@
 import random
+from dataclasses import dataclass
 from src.Reports import performance
 
 
@@ -76,15 +77,15 @@ class Genome:
         for i in range(len(dead_sensors), 0, -1):
             self.sensors.pop(dead_sensors[i-1])
 
+@dataclass
 class Being:
-    def __init__(self, starting_coordinates, gene_length, genes=None):
-        self.x = starting_coordinates.x
-        self.y = starting_coordinates.y
-        self.age = 0
-        self.lastMoveDirection = Coordinate(0,0)
-        self.excitability = random.uniform(0.5,1.5)
-        self.genome = Genome(gene_length=gene_length, genes=genes)
-
+    x: int
+    y: int
+    age: int
+    lastMoveDirection: Coordinate
+    excitability: float
+    genome: Genome
+    
     def update_position(self, new_coordinate):
         self.x = new_coordinate.x
         self.y = new_coordinate.y
@@ -113,13 +114,10 @@ class Being:
 
     def activate_senses(self):
         sensorInfo = SensorInformationStruct(self)
-        for sense in self.genome.sensors:
-            sense.feed_forward(sensorInfo, self.genome.blueprints, self.excitability)
+        [sense.feed_forward(sensorInfo, self.genome.blueprints, self.excitability) for sense in self.genome.sensors]
 
     def process_internals(self):
-        for internal in self.genome.internals:
-            internal.feed_forward(None, self.genome.blueprints, self.excitability)
-
+        [internal.feed_forward(None, self.genome.blueprints, self.excitability) for internal in self.genome.internals]
 
 class PopulationSingleton(object):
     def __new__(cls):

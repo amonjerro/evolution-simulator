@@ -1,5 +1,6 @@
 import random
 from collections import Counter
+from tkinter import LAST
 from src.imager import ImageManagerSingleton
 from src.being import Being, PopulationSingleton
 from src.board import Coordinate, BoardSingleton
@@ -58,6 +59,8 @@ class Simulation:
 
     @performance_check("pop_board", "Populate the board")
     def populate_board(self, beings=None):
+        from src.being import Genome
+        import random
         dimensions = self.board.get_dimensions()
         for i in range(self.population.get_population_size()):
             populated = False
@@ -69,12 +72,13 @@ class Simulation:
                 if beings is not None and len(beings)>0:
                     being_a, being_b = random.sample(beings, 2)
                     new_gene_strings = self.reproduction_function(being_a, being_b)
-                    b = Being(starting_coordinates=starting_coordinate, 
-                                gene_length=self.gene_length, 
-                                genes=new_gene_strings)
+                    b = Being(x=starting_coordinate.x, 
+                              y=starting_coordinate.y, lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
+                              age=0, genome=Genome(gene_length=self.gene_length, genes=new_gene_strings))
                 else:
-                    b = Being(starting_coordinates=starting_coordinate, 
-                                gene_length=self.gene_length)
+                    b = Being(x=starting_coordinate.x, 
+                              y=starting_coordinate.y,lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
+                              age=0, genome=Genome(gene_length=self.gene_length, genes=None))
                
                 b.genome.set_quick_access_arrays()
                 b.set_neuron_blueprints(self.neuronFactory.make_neurons_for_being())

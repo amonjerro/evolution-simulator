@@ -1,5 +1,5 @@
 import time
-import config
+
 
 class PerformanceInformation:
     def __init__(self, tag='', description='', timeTaken=0):
@@ -42,6 +42,7 @@ class Performance:
         self.performance_evaluations[parent_tag].subTasks[tag].time += value
         self.performance_evaluations[parent_tag].subTasks[tag].times += 1
     def print_performance(self):
+        import config
         if not config.CONFIG['performance-profile']:
             return
         print('====== Performance Evaluation =======')
@@ -55,10 +56,38 @@ class Performance:
                 print(f'\t {subTask.description}')
                 print(f'\t Total Time taken: {subTask.time} s')
                 print(f'\t Average operation time: {subTask.time / subTask.times} s')
-                
             print()
 
+    def make_performance_headers(self, tags):
+        headers = ['Entry','Population Size', 'Gene Length', 'Steps Per Generation'] + tags
+        return headers
+            
+    def performance_report(self, tags, headers=False):
+        import uuid
+        import config
+        entry = uuid.uuid4()
+        row_data = [entry,config.CONFIG['population-size'], config.CONFIG['gene-length'], config.CONFIG['max-steps']]
+        row_data += [self.performance_evaluations[tag].time for tag in tags]
+        row_data = list(map(str, row_data))
+        with open(f'./{config.CONFIG["image-output-path"]}/reports/performance.csv', 'a') as f:
+            if headers:
+                f.write(','.join(self.make_performance_headers(tags))+'\n')
+            f.write(','.join(row_data)+'\n')
+
+    def subtask_performance_report(self, parent_tag, headers=False):
+        import config
+        import uuid
+        entry = uuid.uuid4()
+        row_data = [entry,config.CONFIG['population-size'], config.CONFIG['gene-length'], config.CONFIG['max-steps']]
+        row_data += [subTask.time for subTask in self.performance_evaluations[parent_tag].subTasks.values()]
+        row_data = list(map(str, row_data)) 
+        with open(f'./{config.CONFIG["image-output-path"]}/reports/performance_sub_task.csv', 'a') as f:
+            if headers:
+                f.write(','.join(self.make_performance_headers(self.performance_evaluations[parent_tag].subTaskTags))+'\n')
+            f.write(','.join(row_data)+'\n')
+
 def performance_check(tag, description, parent_tag=''):
+    import config
     def function_handler(f):
         def time_evaluation_wrapper(*args, **kwargs):
             if not config.CONFIG['performance-profile']:

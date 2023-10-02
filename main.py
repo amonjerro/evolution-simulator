@@ -30,3 +30,5 @@ if __name__ == '__main__':
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[20], 20)
     ImageManagerSingleton().display_genome(sim.get_population().get_beings()[30], 30)
     Performance().print_performance()
+    Performance().performance_report(['sim_step','pop_board'], CONFIG['performance-headers'])
+    Performance().subtask_performance_report('sim_step', CONFIG['performance-headers'])
