@@ -77,21 +77,19 @@ class Genome:
         for i in range(len(dead_sensors), 0, -1):
             self.sensors.pop(dead_sensors[i-1])
 
-@dataclass
+@dataclass(slots=True, frozen=True)
 class Being:
-    x: int
-    y: int
+    position:Coordinate
     age: int
     lastMoveDirection: Coordinate
     excitability: float
     genome: Genome
     
     def update_position(self, new_coordinate):
-        self.x = new_coordinate.x
-        self.y = new_coordinate.y
+        self.position.set(new_coordinate)
 
     def get_position(self):
-        return Coordinate(self.x, self.y)
+        return Coordinate(self.position.x, self.position.y)
 
     def get_genome(self):
         return self.genome
@@ -107,15 +105,15 @@ class Being:
     @performance_check('act', 'Beings acting', 'sim_step')
     def act(self):
         position_update = self.get_position()
-        for action in self.genome.actions:
-            c = action.enact(self.genome.blueprints, self.excitability)
-            position_update.add(c)
+        [position_update.add(action.enact(self.genome.blueprints, self.excitability)) for action in self.genome.actions]
         return position_update
 
+    @performance_check('sense', "Obtain sensor information", "sim_step")
     def activate_senses(self):
         sensorInfo = SensorInformationStruct(self)
         [sense.feed_forward(sensorInfo, self.genome.blueprints, self.excitability) for sense in self.genome.sensors]
-
+    
+    @performance_check('internals', "Process all internal signals", "sim_step")
     def process_internals(self):
         [internal.feed_forward(None, self.genome.blueprints, self.excitability) for internal in self.genome.internals]
 
@@ -144,14 +142,11 @@ class PopulationSingleton(object):
     def get_beings(self):
         return self.being_list
     
-    @performance_check('sense', "Obtain sensor information", "sim_step")
     def execute_senses(self):
         [being.activate_senses() for being in self.being_list]
     
-    @performance_check('internals', "Process all internal signals", "sim_step")
     def process_internal_signals(self):
-        for being in self.being_list:
-            being.process_internals()
+        [being.process_internals() for being in self.being_list]
     
     def add_being(self, being):
         self.being_list.append(being)

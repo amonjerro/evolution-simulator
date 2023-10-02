@@ -72,12 +72,10 @@ class Simulation:
                 if beings is not None and len(beings)>0:
                     being_a, being_b = random.sample(beings, 2)
                     new_gene_strings = self.reproduction_function(being_a, being_b)
-                    b = Being(x=starting_coordinate.x, 
-                              y=starting_coordinate.y, lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
+                    b = Being(position=starting_coordinate, lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
                               age=0, genome=Genome(gene_length=self.gene_length, genes=new_gene_strings))
                 else:
-                    b = Being(x=starting_coordinate.x, 
-                              y=starting_coordinate.y,lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
+                    b = Being(position=starting_coordinate,lastMoveDirection=Coordinate(0,0), excitability = random.uniform(0.5,1.5),
                               age=0, genome=Genome(gene_length=self.gene_length, genes=None))
                
                 b.genome.set_quick_access_arrays()
@@ -96,16 +94,12 @@ class Simulation:
             #For every being, sense & feedforward
             self.population.execute_senses()
             self.population.process_internal_signals()
-
-            #For every being, stage the actions they want to perform
-            beings = self.population.get_beings()
-            for being in beings:
-                tentative_new_coordinate = being.act()
-                if self.board.is_valid_move(tentative_new_coordinate):
-                    self.board.collision_map_add(tentative_new_coordinate, being)
-                else:
-                    self.board.collision_map_add(being.get_position(), being)
-
+            
+            #Actions
+            tentative_coordinates = {being:being.act() for being in self.population.get_beings()}
+            move_validity_mask = {k:self.board.is_valid_move(v) for k,v in tentative_coordinates.items()}
+            [self.board.collision_map_add(tentative_coordinates[k],k) if v else self.board.collision_map_add(k.get_position(), k) for k,v in move_validity_mask.items()]
+            
             for position in self.board.collision_map:
                 self.board.resolve_occupation(position)
 

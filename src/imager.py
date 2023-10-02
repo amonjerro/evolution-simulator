@@ -47,8 +47,8 @@ class ImageManagerSingleton(object):
                 im.save(f, 'jpeg')
 
     def draw_being(self, draw_ctx, being):
-        origin_x = being.x * self.being_size
-        origin_y = being.y * self.being_size
+        origin_x = being.position.x * self.being_size
+        origin_y = being.position.y * self.being_size
         draw_ctx.ellipse(
             [
                 (origin_x, origin_y),

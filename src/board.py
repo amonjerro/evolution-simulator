@@ -15,6 +15,10 @@ class Coordinate:
         self.x += other.x
         self.y += other.y
     
+    def set(self, other):
+        self.x = other.x
+        self.y = other.y
+
     def compare(self, other):
         return self.x == other.x and self.y == other.y
 
@@ -91,7 +95,7 @@ class BoardSingleton(object):
 
     def populate_space(self, being):
         if not self.is_occupied(being.get_position()):
-            self.board[being.y][being.x] = being
+            self.board[being.position.y][being.position.x] = being
             return True
         return False
 

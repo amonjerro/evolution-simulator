@@ -138,6 +138,9 @@ class Gene:
         self.INTERNAL_INDEX = 1
         self.ACTION_INDEX = 3
         self.SPEC_ACTION_INDEX = 2
+        self.origin = None
+        self.target = None
+        self.connection_sensitivity = 0
         if hex_string:
             self.gene_string = hex_string
         else:
@@ -191,35 +194,35 @@ class Gene:
 
     @performance_check('decode','Decode a gene string')
     def decode(self, blueprint):
-        #The hexstring that contains all the information to describe the gene
-        origin = None
-        target = None
+        #Cache the decoding
 
-        origin_neuron_type = int(self.gene_string[self.SENSOR_INDEX], 16)
-        origin_rounds = int(self.gene_string[self.SPEC_SENSOR_INDEX], 16)
-        target_neuron_type = int(self.gene_string[self.ACTION_INDEX], 16)
-        target_rounds = int(self.gene_string[self.SPEC_ACTION_INDEX], 16)
+        if self.origin is None:
+            #The hexstring that contains all the information to describe the gene
+            origin_neuron_type = int(self.gene_string[self.SENSOR_INDEX], 16)
+            origin_rounds = int(self.gene_string[self.SPEC_SENSOR_INDEX], 16)
+            target_neuron_type = int(self.gene_string[self.ACTION_INDEX], 16)
+            target_rounds = int(self.gene_string[self.SPEC_ACTION_INDEX], 16)
         
-        # Multiply by 1/128 rather than divide by 128 for a slightly (?) faster operation
-        connection_sensitivity = int(self.gene_string[-2:],16) * 0.0078125
+            # Multiply by 1/128 rather than divide by 128 for a slightly (?) faster operation
+            self.connection_sensitivity = int(self.gene_string[-2:],16) * 0.0078125
 
-        origin_key = ''
-        if origin_neuron_type % 2 == 0:
-            #Origin is a Sensor
-            origin_key = NeuronEnum.SENSOR
-        else:
-            origin_key = NeuronEnum.INTERNAL
-        origin = self._get_neuron_from_blueprint(blueprint, origin_key, origin_rounds)
+            origin_key = ''
+            if origin_neuron_type % 2 == 0:
+                #Origin is a Sensor
+                origin_key = NeuronEnum.SENSOR
+            else:
+                origin_key = NeuronEnum.INTERNAL
+            self.origin = self._get_neuron_from_blueprint(blueprint, origin_key, origin_rounds)
         
-        target_key = ''
-        if target_neuron_type % 2 == 0:
-            #Target is an action
-            target_key = NeuronEnum.ACTION
-        else:
-            target_key = NeuronEnum.INTERNAL
-        target = self._get_neuron_from_blueprint(blueprint, target_key, target_rounds)
+            target_key = ''
+            if target_neuron_type % 2 == 0:
+                #Target is an action
+                target_key = NeuronEnum.ACTION
+            else:
+                target_key = NeuronEnum.INTERNAL
+            self.target = self._get_neuron_from_blueprint(blueprint, target_key, target_rounds)
 
-        return origin, target, connection_sensitivity
+        return self.origin, self.target, self.connection_sensitivity
 
     
 
